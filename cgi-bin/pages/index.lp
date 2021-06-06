@@ -17,7 +17,7 @@
     <div class="bg-light p-5 rounded">
         <div class="text-center">
             <h1>Xiaomi Mi Home Security Camera</h1>
-            <p><img id="camera_image" src="/cgi-bin/get_image.cgi" alt="Image" width="640" height="360"></p>
+            <p><img id="camera_image" src="/cgi-bin/get_image.cgi" alt="Image" width="100%" height="100%"></p>
             <p>
                 <button id="switch_button" class="btn btn-lg btn-secondary" onclick="switch_update()" role="button">Start refresh</button>
             </p>
