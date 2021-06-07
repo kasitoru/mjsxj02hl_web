@@ -32,21 +32,25 @@ end
 functions.file.save_post = function(post_file, filename)
     local file_length = 0
     local file_error = nil
-    local out_file, file_error = io.open(filename, "wb")
-    if out_file then
-        repeat
-            local bytes = post_file.file:read(1024)
-            if bytes then
-                out_file:write(bytes)
-            else
-                out_file:flush()
+    if (post_file and post_file.file and (type(post_file.file) == "file")) then
+        local out_file, file_error = io.open(filename, "wb")
+        if out_file then
+            repeat
+                local bytes = post_file.file:read(1024)
+                if bytes then
+                    out_file:write(bytes)
+                else
+                    out_file:flush()
+                end
+            until not bytes
+            file_length, file_error = out_file:seek()
+            out_file:close()
+            if file_error then
+                os.remove(filename)
             end
-        until not bytes
-        file_length, file_error = out_file:seek()
-        out_file:close()
-        if file_error then
-            os.remove(filename)
         end
+    else
+        file_error = "Bad post file"
     end
     return file_length, file_error
 end
