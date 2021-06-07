@@ -71,6 +71,17 @@ functions.app.default_settings = function()
     }
 end
 
+-- Default wpa_supplicant.conf settings
+functions.app.default_wpa_supplicant = function()
+    return {
+        network = {
+            scan_ssid = 1,
+            ssid = "",
+            psk = ""
+        }
+    }
+end
+
 -- Table of exclude pages
 functions.app.exclude_pages = function()
     return {

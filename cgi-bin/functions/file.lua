@@ -93,4 +93,61 @@ functions.file.get_extension = function(filename)
     return ""
 end
 
+-- Read wpa_supplicant.conf to table
+-- TODO: Write universal code
+functions.file.read_wpa_supplicant = function(filename)
+    local wpa_data, wpa_error = {}, nil
+    local content = functions.file.get_contents(filename)
+    -- network
+    local network = string.match(content, "network[%s]*=[%s]*{(.-)}")
+    if network then
+        wpa_data["network"] = {}
+        -- network.scan_ssid
+        local scan_ssid = string.match(network, "[%s]+scan_ssid=[%s]*(%S*)[%s]*")
+        if scan_ssid then
+            wpa_data["network"]["scan_ssid"] = functions.string.trim(scan_ssid, '"')
+        end
+        -- network.ssid
+        local ssid = string.match(network, "[%s]+ssid=[%s]*(%S*)[%s]*")
+        if ssid then
+            wpa_data["network"]["ssid"] = functions.string.trim(ssid, '"')
+        end
+        -- network.psk
+        local psk = string.match(network, "[%s]+psk=[%s]*(%S*)[%s]*")
+        if psk then
+            wpa_data["network"]["psk"] = functions.string.trim(psk, '"')
+        end
+    end
+    return wpa_data, wpa_error
+end
+
+-- Save wpa_supplicant.conf from table
+-- TODO: Write universal code
+functions.file.save_wpa_supplicant = function(filename, tbl)
+    local wpa_error = nil
+    local wpa_file, wpa_error = io.open(filename, "w")
+    if wpa_file then
+        -- network
+        if tbl.network then
+            wpa_file:write("network={\r\n")
+            -- network.scan_ssid
+            if tbl.network.scan_ssid then
+                wpa_file:write("    scan_ssid=" .. tbl.network.scan_ssid .. "\r\n")
+            end
+            -- network.ssid
+            if tbl.network.ssid then
+                wpa_file:write("    ssid=\"" .. tbl.network.ssid .. "\"\r\n")
+            end
+            -- network.psk
+            if tbl.network.psk then
+                wpa_file:write("    psk=\"" .. tbl.network.psk .. "\"\r\n")
+            end
+            wpa_file:write("}\r\n")
+        end
+        wpa_file:close()
+        return true, wpa_error
+    end
+    return false, wpa_error
+end
+
 return functions.file
