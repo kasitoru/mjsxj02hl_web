@@ -57,13 +57,14 @@ end
 
 -- Get file contents
 functions.file.get_contents = function(filename)
-    local contents = ""
-    local file = io.open(filename, "rb")
-    if not functions.string.is_empty(file) then
-        contents = file:read("*a")
+    local file_data = ""
+    local file_error = nil
+    local file, file_error = io.open(filename, "rb")
+    if file then
+        file_data = file:read("*a")
         file:close()
     end
-    return contents
+    return file_data, file_error
 end
 
 -- Get filename from path
