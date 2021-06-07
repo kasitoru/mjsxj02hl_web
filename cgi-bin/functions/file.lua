@@ -23,9 +23,9 @@ functions.file.is_dir = function(dirname)
     end
 end
 
--- Check is a file
+-- Check is a dir and it exists
 functions.file.is_file = function(filename)
-    return not functions.file.is_dir(filename)
+    return (functions.file.exists(filename) and (not functions.file.is_dir(filename)))
 end
 
 -- Save the file submitted from form
