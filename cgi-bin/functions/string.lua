@@ -56,6 +56,9 @@ end
 -- Left trim string
 functions.string.ltrim = function(str, symbol)
     if str then
+        if functions.string.is_empty(symbol) then
+            symbol = " "
+        end
         symbol = functions.string.escape_pattern(symbol)
         return string.match(str, "^" .. symbol .. "*(.-)$")
     end
@@ -65,6 +68,9 @@ end
 -- Right trim string
 functions.string.rtrim = function(str, symbol)
     if str then
+        if functions.string.is_empty(symbol) then
+            symbol = " "
+        end
         symbol = functions.string.escape_pattern(symbol)
         return string.match(str, "^(.-)" .. symbol .. "*$")
     end
