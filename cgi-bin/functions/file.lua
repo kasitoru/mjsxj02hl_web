@@ -55,7 +55,7 @@ functions.file.save_post = function(post_file, filename)
             end
         end
     else
-        file_error = "Bad post file"
+        file_error = "Incorrect file descriptor"
     end
     return file_length, file_error
 end
