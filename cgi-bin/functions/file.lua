@@ -143,32 +143,22 @@ functions.file.build_wpa_supplicant = function(tbl, tab)
 end
 
 -- Save wpa_supplicant.conf from table
--- TODO: Write universal code
 functions.file.save_wpa_supplicant = function(filename, tbl)
-    local wpa_error = nil
-    local wpa_file, wpa_error = io.open(filename, "w")
-    if wpa_file then
-        -- network
-        if tbl.network then
-            wpa_file:write("network={\r\n")
-            -- network.scan_ssid
-            if tbl.network.scan_ssid then
-                wpa_file:write("    scan_ssid=" .. tbl.network.scan_ssid .. "\r\n")
+    local wpa_result, wpa_content, wpa_error = false, "", nil
+    if type(tbl) == "table" then
+        local wpa_file, wpa_error = io.open(filename, "w")
+        if wpa_file then
+            wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl, 0)
+            if not wpa_error then
+                wpa_file:write(wpa_content)
+                wpa_result = true
             end
-            -- network.ssid
-            if tbl.network.ssid then
-                wpa_file:write("    ssid=\"" .. tbl.network.ssid .. "\"\r\n")
-            end
-            -- network.psk
-            if tbl.network.psk then
-                wpa_file:write("    psk=\"" .. tbl.network.psk .. "\"\r\n")
-            end
-            wpa_file:write("}\r\n")
+            wpa_file:close()
         end
-        wpa_file:close()
-        return true, wpa_error
+    else
+        wpa_error = "Parameter 2 is a " .. type(tbl) .. " instead of a table"
     end
-    return false, wpa_error
+    return wpa_result, wpa_error
 end
 
 return functions.file
