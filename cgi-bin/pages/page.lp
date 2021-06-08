@@ -70,6 +70,7 @@ end
         <title>MJSXJ02HL: <%= page_info.title %></title>
         <link rel="icon" href="/favicon.ico">
         <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/fontawesome.min.css">
         <link rel="stylesheet" href="/css/style.css">
         <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     </head>
