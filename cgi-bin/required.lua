@@ -9,6 +9,7 @@ required = function()
         lua = {
             next     = next, -- Allows a program to traverse all fields of a table (https://www.lua.org/manual/5.4/manual.html#pdf-next)
             tonumber = tonumber, -- Tries to convert its argument to a number (https://www.lua.org/manual/5.4/manual.html#pdf-tonumber)
+            type     = type, -- Returns the type of its only argument, coded as a string (https://www.lua.org/manual/5.4/manual.html#pdf-type)
         },
         
         -- Internal
