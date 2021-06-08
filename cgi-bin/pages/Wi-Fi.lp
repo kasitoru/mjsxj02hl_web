@@ -43,6 +43,7 @@ os = required.os
                                 $(settings_form).find("input#action_value").val(e.target.id);
                                 settings_form.submit();
                             });
+                            $(settings_form).find("input[type=password]").password();
                         });
                     })(jQuery); 
                 </script>

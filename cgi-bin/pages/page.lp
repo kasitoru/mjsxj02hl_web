@@ -103,5 +103,6 @@ end
         })
         %>
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap-show-password.min.js"></script>
     </body>
 </html>

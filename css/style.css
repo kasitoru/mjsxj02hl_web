@@ -12,3 +12,8 @@
     }
 }
 
+.input-group .input-group-append button.btn.btn-outline-secondary[type=button] {
+    border-radius: 0 .25rem .25rem 0;
+    border-color: #ced4da;
+}
+
