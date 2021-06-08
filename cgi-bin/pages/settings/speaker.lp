@@ -11,7 +11,7 @@ fnc = required.fnc
             local config_file = "/usr/app/share/mjsxj02hl.conf"
             local default_settings = fnc.app.default_settings()
             local current_settings = default_settings
-            if fnc.file.is_file(config_file) and fnc.file.exists(config_file) then
+            if fnc.file.is_file(config_file) then
                 current_settings = lip.load(config_file)
                 current_settings = fnc.table.merge(default_settings, current_settings)
             end
