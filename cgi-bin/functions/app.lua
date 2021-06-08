@@ -15,17 +15,6 @@ functions.app.default_page_info = function()
     }
 end
 
--- Restart mjsxj02hl application
-functions.app.restart = function()
-    if os.execute("killall mjsxj02hl") then
-        functions.app.sleep(3)
-        if os.execute("mjsxj02hl &") then
-            return true
-        end
-    end
-    return false
-end
-
 -- Default mjsxj02hl application settings
 functions.app.default_settings = function()
     return {
@@ -90,6 +79,17 @@ functions.app.exclude_pages = function()
         "error.lp",
         "page.lp",
     }
+end
+
+-- Restart mjsxj02hl application
+functions.app.restart = function()
+    if os.execute("killall mjsxj02hl") then
+        functions.app.sleep(3)
+        if os.execute("mjsxj02hl &") then
+            return true
+        end
+    end
+    return false
 end
 
 -- Get page title by filename
