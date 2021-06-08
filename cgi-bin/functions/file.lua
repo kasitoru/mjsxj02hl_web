@@ -28,11 +28,16 @@ functions.file.is_file = function(filename)
     return (functions.file.exists(filename) and (not functions.file.is_dir(filename)))
 end
 
+-- Checks if the passed argument is a file descriptor
+functions.file.is_file_descriptor = function(file)
+    return (io.type(file) == "file")
+end
+
 -- Save the file submitted from form
 functions.file.save_post = function(post_file, filename)
     local file_length = 0
     local file_error = nil
-    if (post_file and post_file.file and (type(post_file.file) == "file")) then
+    if (post_file and post_file.file and functions.file.is_file_descriptor(post_file.file)) then
         local out_file, file_error = io.open(filename, "wb")
         if out_file then
             repeat
