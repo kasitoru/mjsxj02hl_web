@@ -121,6 +121,27 @@ functions.file.read_wpa_supplicant = function(filename)
     return wpa_data, wpa_error
 end
 
+-- Build wpa_supplicant.conf content from table
+functions.file.build_wpa_supplicant = function(tbl, tab)
+    local wpa_content, wpa_error = "", nil
+    if type(tbl) == "table" then
+        for key, value in pairs(tbl) do
+            if type(value) == "table" then
+                wpa_content = wpa_content .. string.rep("    ", tab) .. key .. "={\r\n";
+                wpa_content = wpa_content .. functions.file.build_wpa_supplicant(value, tab + 1)
+                wpa_content = wpa_content .. string.rep("    ", tab) .. "}\r\n";
+            elseif type(value) == "string" then
+                wpa_content = wpa_content .. string.rep("    ", tab) .. key .. '="' .. value .. '"\r\n';
+            elseif type(value) == "number" then
+                wpa_content = wpa_content .. string.rep("    ", tab) .. key .. "=" .. value .. "\r\n";
+            end
+        end
+    else
+        wpa_error = "Parameter 2 is a " .. type(tbl) .. " instead of a table"
+    end
+    return wpa_content, wpa_error
+end
+
 -- Save wpa_supplicant.conf from table
 -- TODO: Write universal code
 functions.file.save_wpa_supplicant = function(filename, tbl)
