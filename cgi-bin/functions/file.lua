@@ -98,32 +98,47 @@ functions.file.get_extension = function(filename)
     return ""
 end
 
--- Read wpa_supplicant.conf to table
--- TODO: Write universal code
-functions.file.read_wpa_supplicant = function(filename)
-    local wpa_data, wpa_error = {}, nil
-    local content = functions.file.get_contents(filename)
-    -- network
-    local network = string.match(content, "network[%s]*=[%s]*{(.-)}")
-    if network then
-        wpa_data["network"] = {}
-        -- network.scan_ssid
-        local scan_ssid = string.match(network, "[%s]+scan_ssid=[%s]*(%S*)[%s]*")
-        if scan_ssid then
-            wpa_data["network"]["scan_ssid"] = functions.string.trim(scan_ssid, '"')
+-- Parser of the open wpa_supplicant.conf file to the table
+functions.file.parse_wpa_supplicant = function(wpa_file)
+    local wpa_content, wpa_error = {}, nil
+    if functions.file.is_file_descriptor(wpa_file) then
+        for line in wpa_file:lines() do
+            local param, value = line:match("^%s*([%w|_]+)%s*=%s*(.*)[\r]?$")
+            if param and value ~= nil then
+                value = value:match("^(.-)%s-;.-$") or value:match("^(.-)%s-$")
+                if value == "{" then
+                    wpa_content[param], wpa_error = functions.file.parse_wpa_supplicant(wpa_file)
+                    if wpa_error then break end
+                else
+                    local strval = value:match('^"(.*)"$')
+                    if strval then
+                        value = strval
+                    elseif tonumber(value) then
+                        value = tonumber(value)
+                    else
+                        value = tostring(value)
+                    end
+                    wpa_content[param] = value
+                end
+            elseif line:match("^%s*}%s*[\r]?$") then
+                break
+            end
         end
-        -- network.ssid
-        local ssid = string.match(network, "[%s]+ssid=[%s]*(%S*)[%s]*")
-        if ssid then
-            wpa_data["network"]["ssid"] = functions.string.trim(ssid, '"')
-        end
-        -- network.psk
-        local psk = string.match(network, "[%s]+psk=[%s]*(%S*)[%s]*")
-        if psk then
-            wpa_data["network"]["psk"] = functions.string.trim(psk, '"')
-        end
+    else
+        wpa_error = "Incorrect file descriptor"
     end
-    return wpa_data, wpa_error
+    return wpa_content, wpa_error
+end
+
+-- Read wpa_supplicant.conf to table
+functions.file.read_wpa_supplicant = function(filename)
+    local wpa_result, wpa_content, wpa_error = false, {}, nil
+    local wpa_file, wpa_error = io.open(filename, "r")
+    if wpa_file then
+        wpa_content, wpa_error = functions.file.parse_wpa_supplicant(wpa_file)
+        wpa_file:close()
+    end
+    return wpa_content, wpa_error
 end
 
 -- Build wpa_supplicant.conf content from table
