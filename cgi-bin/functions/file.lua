@@ -145,18 +145,14 @@ end
 -- Save wpa_supplicant.conf from table
 functions.file.save_wpa_supplicant = function(filename, tbl)
     local wpa_result, wpa_content, wpa_error = false, "", nil
-    if type(tbl) == "table" then
-        local wpa_file, wpa_error = io.open(filename, "w")
-        if wpa_file then
-            wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl, 0)
-            if not wpa_error then
-                wpa_file:write(wpa_content)
-                wpa_result = true
-            end
-            wpa_file:close()
+    local wpa_file, wpa_error = io.open(filename, "w")
+    if wpa_file then
+        wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl, 0)
+        if not wpa_error then
+            wpa_file:write(wpa_content)
+            wpa_result = true
         end
-    else
-        wpa_error = "Parameter 2 is a " .. type(tbl) .. " instead of a table"
+        wpa_file:close()
     end
     return wpa_result, wpa_error
 end
