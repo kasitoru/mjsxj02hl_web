@@ -122,18 +122,19 @@ functions.file.read_wpa_supplicant = function(filename)
 end
 
 -- Build wpa_supplicant.conf content from table
-functions.file.build_wpa_supplicant = function(tbl, tab)
+functions.file.build_wpa_supplicant = function(tbl, _tab)
+    if not _tab then _tab = 0 end
     local wpa_content, wpa_error = "", nil
     if type(tbl) == "table" then
         for key, value in pairs(tbl) do
             if type(value) == "table" then
-                wpa_content = wpa_content .. string.rep("    ", tab) .. key .. "={\r\n";
-                wpa_content = wpa_content .. functions.file.build_wpa_supplicant(value, tab + 1)
-                wpa_content = wpa_content .. string.rep("    ", tab) .. "}\r\n";
+                wpa_content = wpa_content .. string.rep("    ", _tab) .. key .. "={\r\n";
+                wpa_content = wpa_content .. functions.file.build_wpa_supplicant(value, _tab + 1)
+                wpa_content = wpa_content .. string.rep("    ", _tab) .. "}\r\n";
             elseif type(value) == "string" then
-                wpa_content = wpa_content .. string.rep("    ", tab) .. key .. '="' .. value .. '"\r\n';
+                wpa_content = wpa_content .. string.rep("    ", _tab) .. key .. '="' .. value .. '"\r\n';
             elseif type(value) == "number" then
-                wpa_content = wpa_content .. string.rep("    ", tab) .. key .. "=" .. value .. "\r\n";
+                wpa_content = wpa_content .. string.rep("    ", _tab) .. key .. "=" .. value .. "\r\n";
             end
         end
     else
@@ -147,7 +148,7 @@ functions.file.save_wpa_supplicant = function(filename, tbl)
     local wpa_result, wpa_content, wpa_error = false, "", nil
     local wpa_file, wpa_error = io.open(filename, "w")
     if wpa_file then
-        wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl, 0)
+        wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl)
         if not wpa_error then
             wpa_file:write(wpa_content)
             wpa_result = true
