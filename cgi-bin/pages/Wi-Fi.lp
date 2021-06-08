@@ -2,7 +2,7 @@
 lua = required.lua
 lip = required.lip
 fnc = required.fnc
-string = required.string
+os = required.os
 %>
 <main class="container">
     <div class="bg-light p-5 rounded">
@@ -54,20 +54,27 @@ string = required.string
                     if current_settings.network.scan_ssid > 1 then current_settings.network.scan_ssid = 1 end
                     current_settings.network.ssid = (cgilua.POST.ssid or default_settings.network.ssid)
                     current_settings.network.psk = (cgilua.POST.psk or default_settings.network.psk)
-                    if fnc.file.save_wpa_supplicant(config_file, current_settings) then
+                    local wpa_result, wpa_error = fnc.file.save_wpa_supplicant(config_file, current_settings)
+                    if wpa_result then
                         %>
                         <p class="lead mb-4"><b>Wi-Fi configuration saved successfully!</b></p>
                         <%
                     else
                         %>
-                        <p class="lead mb-4 text-danger"><b>Error saving the Wi-Fi configuration!</b></p>
+                        <p class="lead mb-4 text-danger"><b><%= wpa_error %>!</b></p>
                         <%
                     end
                 elseif cgilua.POST.action == "action_defaults" then
-                    current_settings.alarm = default_settings.alarm
-                    %>
-                    <p class="lead mb-4"><b>Alarm successfully reset to factory settings!</b></p>
-                    <%
+                    local wpa_result, wpa_error = os.remove(config_file)
+                    if wpa_result then
+                        %>
+                        <p class="lead mb-4"><b>Alarm successfully reset to factory settings!</b></p>
+                        <%
+                    else
+                        %>
+                        <p class="lead mb-4 text-danger"><b><%= wpa_error %>!</b></p>
+                        <%
+                    end
                 else
                     cgilua.redirect("/")
                     return
