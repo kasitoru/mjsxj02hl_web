@@ -84,9 +84,10 @@ end
 -- Restart mjsxj02hl application
 functions.app.restart = function()
     if os.execute("killall mjsxj02hl") then
-        functions.app.sleep(3)
-        if os.execute("mjsxj02hl &") then
-            return true
+        if functions.app.sleep(3) then
+            if os.execute("mjsxj02hl &") then
+                return true
+            end
         end
     end
     return false
@@ -94,7 +95,7 @@ end
 
 -- Get page title by filename
 functions.app.title_by_filename = function(filename)
-    if filename then
+    if functions.string.is_string(filename) then
         filename = functions.file.name_from_path(filename)
         filename = functions.file.trim_extension(filename)
         filename = functions.string.replace("_", " ", filename)
@@ -106,11 +107,13 @@ end
 
 -- Flashing the selected partition
 functions.app.flash_partition = function(filename, partition)
-    if functions.file.exists(filename) and functions.file.exists(partition) then
-        if os.execute("flash_eraseall " .. partition) then
-            if os.execute("sync") then
-                if os.execute("flashcp -v " .. filename .. " " .. partition) then
-                    return true
+    if functions.string.is_string(filename) and functions.string.is_string(partition) then
+        if functions.file.exists(filename) and functions.file.exists(partition) then
+            if os.execute("flash_eraseall " .. partition) then
+                if os.execute("sync") then
+                    if os.execute("flashcp -v " .. filename .. " " .. partition) then
+                        return true
+                    end
                 end
             end
         end
@@ -120,7 +123,12 @@ end
 
 -- Sleep N seconds
 functions.app.sleep = function(n)
-    os.execute("sleep " .. tonumber(n))
+    if type(n) == "number" then
+        if os.execute("sleep " .. n) then
+            return true
+        end
+    end
+    return false
 end
 
 return functions.app
