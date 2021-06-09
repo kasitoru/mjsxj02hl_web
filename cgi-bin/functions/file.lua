@@ -1,6 +1,7 @@
 local functions = {
     file = {},
     string = require "functions.string",
+    table = require "functions.table",
 }
 package.loaded[...] = functions.file
 
@@ -162,9 +163,9 @@ end
 functions.file.build_wpa_supplicant = function(tbl, _tab)
     if not _tab then _tab = 0 end
     local wpa_content, wpa_error = "", nil
-    if type(tbl) == "table" then
+    if functions.table.is_table(tbl) then
         for key, value in pairs(tbl) do
-            if type(value) == "table" then
+            if functions.table.is_table(value) then
                 wpa_content = wpa_content .. string.rep("    ", _tab) .. key .. "={\r\n";
                 wpa_content = wpa_content .. functions.file.build_wpa_supplicant(value, _tab + 1)
                 wpa_content = wpa_content .. string.rep("    ", _tab) .. "}\r\n";
@@ -184,7 +185,7 @@ end
 functions.file.save_wpa_supplicant = function(filename, tbl)
     local wpa_result, wpa_content, wpa_error = false, "", nil
     if functions.string.is_string(filename) then
-        if type(tbl) == "table" then
+        if functions.table.is_table(tbl) then
             local wpa_file, wpa_error = io.open(filename, "w")
             if wpa_file then
                 wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl)
