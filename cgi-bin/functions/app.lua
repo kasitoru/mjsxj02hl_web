@@ -75,10 +75,11 @@ end
 -- Table of exclude pages (from navbar and direct request)
 functions.app.exclude_pages = function()
     return {
-        "index.lp", -- Index page
-        "login.lp", -- Login page
-        "error.lp", -- Error page
-        "page.lp",  -- Main template
+        "initial.lp", -- Initial setup
+        "index.lp",   -- Index page
+        "login.lp",   -- Login page
+        "error.lp",   -- Error page
+        "page.lp",    -- Main template
     }
 end
 
