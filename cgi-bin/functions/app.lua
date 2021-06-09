@@ -8,10 +8,10 @@ package.loaded[...] = functions.app
 -- Default page_info table
 functions.app.default_page_info = function()
     return {
-        file = nil,
-        navbar = true,
-        title = "",
-        message = "",
+        file = nil,    -- Page file name
+        navbar = true, -- Show navigation bar
+        title = "",    -- Page title
+        message = "",  -- Message for error page(s)
     }
 end
 
@@ -64,20 +64,20 @@ end
 functions.app.default_wpa_supplicant = function()
     return {
         network = {
-            scan_ssid = 1,
-            ssid = "",
-            psk = ""
-        }
+            scan_ssid = 1, -- SSID scan technique (0 = broadcast Probe Request, 1 = directed Probe Request)
+            ssid = "",     -- Service set identifier (SSID)
+            psk = "",      -- Network key (password)
+        },
     }
 end
 
--- Table of exclude pages
+-- Table of exclude pages (from navbar and direct request)
 functions.app.exclude_pages = function()
     return {
-        "index.lp",
-        "login.lp",
-        "error.lp",
-        "page.lp",
+        "index.lp", -- Index page
+        "login.lp", -- Login page
+        "error.lp", -- Error page
+        "page.lp",  -- Main template
     }
 end
 
@@ -106,10 +106,12 @@ end
 
 -- Flashing the selected partition
 functions.app.flash_partition = function(filename, partition)
-    if os.execute("flash_eraseall " .. partition) then
-        if os.execute("sync") then
-            if os.execute("flashcp -v " .. filename .. " " .. partition) then
-                return true
+    if functions.file.exists(filename) and functions.file.exists(partition) then
+        if os.execute("flash_eraseall " .. partition) then
+            if os.execute("sync") then
+                if os.execute("flashcp -v " .. filename .. " " .. partition) then
+                    return true
+                end
             end
         end
     end
