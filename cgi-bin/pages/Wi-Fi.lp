@@ -27,7 +27,7 @@ os = required.os
                     </div>
                     <div class="form-group text-start">
                         <label for="psk" class="form-label">Network key (password):</label>
-                        <input type="password" class="form-control" id="psk" name="psk" placeholder="<%= default_settings.network.psk %>" value="<%= current_settings.network.psk %>" data-toggle="password">
+                        <input type="password" class="form-control" id="psk" name="psk" placeholder="<%= default_settings.network.psk %>" value="<%= current_settings.network.psk %>">
                     </div>
                     <br>
                     <input type="submit" name="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">

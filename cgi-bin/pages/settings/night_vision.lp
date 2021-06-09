@@ -16,7 +16,7 @@ fnc = required.fnc
                 current_settings = fnc.table.merge(default_settings, current_settings)
             end
             -- Settings form and logic
-            if fnc.string.is_empty(cgilua.POST.action) then
+            if fnc.string.is_empty(cgilua.POST.action_save) and fnc.string.is_empty(cgilua.POST.action_defaults) then
                 %>
                 <p class="lead mb-4"><b>Night vision settings</b></p>
                 <form method="POST" id="settings_form" class="d-grid gap-2 justify-content-sm-center">
@@ -37,24 +37,12 @@ fnc = required.fnc
                         </select>
                     </div>
                     <br>
-                    <input type="hidden" id="action_value" name="action" value="">
-                    <input type="button" id="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
-                    <input type="button" id="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
+                    <input type="submit" name="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
+                    <input type="submit" name="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
                 </form>
-                <script type="text/javascript">
-                    (function($) {
-                        $(document).ready(function() {
-                            var settings_form = $("form#settings_form")
-                            $(settings_form).find("input[type=button]").filter("#action_save,#action_defaults").on("click", function(e) {
-                                $(settings_form).find("input#action_value").val(e.target.id);
-                                settings_form.submit();
-                            });
-                        });
-                    })(jQuery); 
-                </script>
                 <%
             else
-                if cgilua.POST.action == "action_save" then
+                if not fnc.string.is_empty(cgilua.POST.action_save) then
                     current_settings.night.mode = lua.tonumber(cgilua.POST.mode or default_settings.night.mode)
                     if current_settings.night.mode < 0 then current_settings.night.mode = 0 end
                     if current_settings.night.mode > 2 then current_settings.night.mode = 2 end
@@ -64,7 +52,7 @@ fnc = required.fnc
                     %>
                     <p class="lead mb-4"><b>Night vision settings saved successfully!</b></p>
                     <%
-                elseif cgilua.POST.action == "action_defaults" then
+                elseif not fnc.string.is_empty(cgilua.POST.action_defaults) then
                     current_settings.night = default_settings.night
                     %>
                     <p class="lead mb-4"><b>Night vision successfully reset to factory settings!</b></p>

@@ -16,7 +16,7 @@ fnc = required.fnc
                 current_settings = fnc.table.merge(default_settings, current_settings)
             end
             -- Settings form and logic
-            if fnc.string.is_empty(cgilua.POST.action) then
+            if fnc.string.is_empty(cgilua.POST.action_save) and fnc.string.is_empty(cgilua.POST.action_defaults) then
                 %>
                 <p class="lead mb-4"><b>MQTT settings</b></p>
                 <form method="POST" id="settings_form" class="d-grid gap-2 justify-content-sm-center">
@@ -53,25 +53,12 @@ fnc = required.fnc
                         <label for="retain" class="form-check-label">Retained messages</label>
                     </div>
                     <br>
-                    <input type="hidden" id="action_value" name="action" value="">
-                    <input type="button" id="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
-                    <input type="button" id="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
+                    <input type="submit" name="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
+                    <input type="submit" name="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
                 </form>
-                <script type="text/javascript">
-                    (function($) {
-                        $(document).ready(function() {
-                            var settings_form = $("form#settings_form")
-                            $(settings_form).find("input[type=button]").filter("#action_save,#action_defaults").on("click", function(e) {
-                                $(settings_form).find("input#action_value").val(e.target.id);
-                                settings_form.submit();
-                            });
-                            $(settings_form).find("input[type=password]").password();
-                        });
-                    })(jQuery); 
-                </script>
                 <%
             else
-                if cgilua.POST.action == "action_save" then
+                if not fnc.string.is_empty(cgilua.POST.action_save) then
                     current_settings.mqtt.server   = (cgilua.POST.server or default_settings.mqtt.server)
                     current_settings.mqtt.port     = lua.tonumber(cgilua.POST.port or default_settings.mqtt.port)
                     current_settings.mqtt.username = (cgilua.POST.username or default_settings.mqtt.username)
@@ -84,7 +71,7 @@ fnc = required.fnc
                     %>
                     <p class="lead mb-4"><b>MQTT settings saved successfully!</b></p>
                     <%
-                elseif cgilua.POST.action == "action_defaults" then
+                elseif not fnc.string.is_empty(cgilua.POST.action_defaults) then
                     current_settings.mqtt = default_settings.mqtt
                     %>
                     <p class="lead mb-4"><b>MQTT successfully reset to factory settings!</b></p>

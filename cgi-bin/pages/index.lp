@@ -1,15 +1,20 @@
 <script type="text/javascript">
     let update_status = null;
     function switch_update() {
+        var switch_button = document.getElementById("switch_button");
         if(update_status) {
             clearInterval(update_status);
             update_status = null;
-            $("#switch_button").removeClass("btn-primary").addClass("btn-secondary").text("Start refresh");
+            switch_button.classList.remove("btn-primary");
+            switch_button.classList.add("btn-secondary");
+            switch_button.textContent = "Start refresh"
         } else {
             update_status = setInterval(function() {
-                $("#camera_image").attr("src", "/cgi-bin/get_image.cgi?random=" + new Date().getTime());
+                document.getElementById("camera_image").src = "/cgi-bin/get_image.cgi?random=" + new Date().getTime();
             }, 1000);
-            $("#switch_button").removeClass("btn-secondary").addClass("btn-primary").text("Stop refresh");
+            switch_button.classList.remove("btn-secondary");
+            switch_button.classList.add("btn-primary");
+            switch_button.textContent = "Stop refresh"
         }
     }
 </script>

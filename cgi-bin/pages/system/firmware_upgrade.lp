@@ -8,7 +8,7 @@ fnc = required.fnc
     <div class="bg-light p-5 rounded">
         <div class="text-center">
             <%
-            if fnc.string.is_empty(cgilua.POST.file) then
+            if fnc.string.is_empty(cgilua.POST.upgrade_firmware) then
                 %>
                 <p class="lead mb-4"><b>Upgrade the device firmware.</b></p>
                 <%
@@ -26,18 +26,9 @@ fnc = required.fnc
                             <div class="form-group">
                                 <input type="file" class="form-control" name="file">
                             </div>
-                            <input type="submit" class="btn btn-primary btn-lg px-4 gap-3" value="Upgrade firmware">
+                            <input type="submit" name="upgrade_firmware" class="btn btn-primary btn-lg px-4 gap-3" value="Upgrade firmware" onclick="setTimeout(() => this.setAttribute('disabled', true), 0);">
                         </form>
                     </p>
-                    <script type="text/javascript">
-                        (function($) {
-                            $(document).ready(function() {
-                                $("form").on("submit", function(e) {
-                                    $(e.target).find("input[type=submit]").prop('disabled', true);
-                                });
-                            });
-                        })(jQuery); 
-                    </script>
                     <%
                 else
                     %>
@@ -46,7 +37,7 @@ fnc = required.fnc
                 end
             else
                 local post_file = cgilua.POST.file
-                if post_file and post_file.filename and lua.next(post_file) then
+                if post_file and (not fnc.string.is_empty(post_file.filename)) and lua.next(post_file) then
                     local firmware_length, firmware_error = fnc.file.save_post(post_file, "/mnt/mmc/demo_hlc6.bin")
                     if not firmware_error then
                         if firmware_length == 12058688 then
@@ -58,19 +49,20 @@ fnc = required.fnc
                                 <p class="lead mb-4"><b>The device is being rebooted, it may take some time.</b></p>
                                 <p class="lead mb-4">Wait <span id="wait_timer">30</span> second(s)...</p>
                                 <script type="text/javascript">
-                                    (function($) {
-                                        $(document).ready(function() {
-                                            var timer_value = $("#wait_timer").text();
+                                    (function() {
+                                        document.addEventListener("DOMContentLoaded", function(event) {
+                                            var timer_element = document.getElementById("wait_timer");
+                                            var timer_value = timer_element.textContent || timer_element.innerText;
                                             let timer_id = setInterval(function() {
                                                 timer_value--;
-                                                $("#wait_timer").text(timer_value);
+                                                timer_element.textContent = timer_value;
                                                 if(timer_value < 1) {
                                                     clearInterval(timer_id);
                                                     window.location.replace("/");
                                                 }
                                             }, 1000);
                                         });
-                                    })(jQuery); 
+                                    })();
                                 </script>
                                 <%
                             else

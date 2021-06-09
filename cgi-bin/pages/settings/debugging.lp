@@ -16,7 +16,7 @@ fnc = required.fnc
                 current_settings = fnc.table.merge(default_settings, current_settings)
             end
             -- Settings form and logic
-            if fnc.string.is_empty(cgilua.POST.action) then
+            if fnc.string.is_empty(cgilua.POST.action_save) and fnc.string.is_empty(cgilua.POST.action_defaults) then
                 %>
                 <p class="lead mb-4"><b>Debugging settings</b></p>
                 <form method="POST" id="settings_form" class="d-grid gap-2 justify-content-sm-center">
@@ -35,24 +35,12 @@ fnc = required.fnc
                         <input type="text" class="form-control" id="file" name="file" placeholder="<%= default_settings.logger.file %>" value="<%= current_settings.logger.file %>">
                     </div>
                     <br>
-                    <input type="hidden" id="action_value" name="action" value="">
-                    <input type="button" id="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
-                    <input type="button" id="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
+                    <input type="submit" name="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
+                    <input type="submit" name="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
                 </form>
-                <script type="text/javascript">
-                    (function($) {
-                        $(document).ready(function() {
-                            var settings_form = $("form#settings_form")
-                            $(settings_form).find("input[type=button]").filter("#action_save,#action_defaults").on("click", function(e) {
-                                $(settings_form).find("input#action_value").val(e.target.id);
-                                settings_form.submit();
-                            });
-                        });
-                    })(jQuery); 
-                </script>
                 <%
             else
-                if cgilua.POST.action == "action_save" then
+                if not fnc.string.is_empty(cgilua.POST.action_save) then
                     current_settings.logger.level = lua.tonumber(cgilua.POST.level or default_settings.logger.level)
                     if current_settings.logger.level < 0 then current_settings.logger.level = 0 end
                     if current_settings.logger.level > 4 then current_settings.logger.level = 4 end
@@ -60,7 +48,7 @@ fnc = required.fnc
                     %>
                     <p class="lead mb-4"><b>Debugging settings saved successfully!</b></p>
                     <%
-                elseif cgilua.POST.action == "action_defaults" then
+                elseif not fnc.string.is_empty(cgilua.POST.action_defaults) then
                     current_settings.logger = default_settings.logger
                     %>
                     <p class="lead mb-4"><b>Debugging successfully reset to factory settings!</b></p>
