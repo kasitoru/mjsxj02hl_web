@@ -50,43 +50,47 @@ fnc = required.fnc
                     local firmware_length, firmware_error = fnc.file.save_post(post_file, "/mnt/mmc/demo_hlc6.bin")
                     if not firmware_error then
                         if firmware_length == 12058688 then
+                            %>
+                            <p class="lead mb-4"><b>Firmware has been successfully saved to the memory card!</b></p>
+                            <%
                             if os.execute("reboot") then
                                 %>
-                                <p class="lead mb-4"><b>Firmware has been successfully saved to the memory card!</b></p>
+                                <p class="lead mb-4"><b>The device is being rebooted, it may take some time.</b></p>
+                                <p class="lead mb-4">Wait <span id="wait_timer">30</span> second(s)...</p>
+                                <script type="text/javascript">
+                                    (function($) {
+                                        $(document).ready(function() {
+                                            var timer_value = $("#wait_timer").text();
+                                            let timer_id = setInterval(function() {
+                                                timer_value--;
+                                                $("#wait_timer").text(timer_value);
+                                                if(timer_value < 1) {
+                                                    clearInterval(timer_id);
+                                                    window.location.replace("/");
+                                                }
+                                            }, 1000);
+                                        });
+                                    })(jQuery); 
+                                </script>
+                                <%
+                            else
+                                %>
+                                <p class="lead mb-4 text-danger">To apply changes, you need <a href="/cgi-bin/app.lua/system/reboot.lp">reboot</a> the device.</p>
                                 <%
                             end
-                            %>
-                            <p class="lead mb-4"><b>The device is being rebooted, it may take some time.</b></p>
-                            <p class="lead mb-4">Wait <span id="wait_timer">30</span> second(s)...</p>
-                            <script type="text/javascript">
-                                (function($) {
-                                    $(document).ready(function() {
-                                        var timer_value = $("#wait_timer").text();
-                                        let timer_id = setInterval(function() {
-                                            timer_value--;
-                                            $("#wait_timer").text(timer_value);
-                                            if(timer_value < 1) {
-                                                clearInterval(timer_id);
-                                                window.location.replace("/");
-                                            }
-                                        }, 1000);
-                                    });
-                                })(jQuery); 
-                            </script>
-                            <%
                         else
                             %>
-                            <p class="lead mb-4"><b>Invalid size of the firmware file!</b></p>
+                            <p class="lead mb-4 text-danger"><b>Invalid size of the firmware file!</b></p>
                             <%
                         end
                     else
                         %>
-                        <p class="lead mb-4"><b><%= firmware_error %>!</b></p>
+                        <p class="lead mb-4 text-danger"><b><%= firmware_error %>!</b></p>
                         <%
                     end
                 else
                     %>
-                    <p class="lead mb-4"><b>No firmware file selected!</b></p>
+                    <p class="lead mb-4 text-danger"><b>No firmware file selected!</b></p>
                     <%
                 end
                 %>

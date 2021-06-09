@@ -65,7 +65,7 @@ fnc = required.fnc
                         <%
                     else
                         %>
-                        <p class="lead mb-4"><b>Error creating a backup file!</b></p>
+                        <p class="lead mb-4 text-danger"><b>Error creating a backup file!</b></p>
                         <%
                     end
                 elseif cgilua.POST.action == "restore_backup" then
@@ -75,45 +75,53 @@ fnc = required.fnc
                         if not backup_error then
                             if backup_length == 393216 then
                                 if fnc.app.flash_partition("/tmp/configs_backup.bin", "/dev/mtd6") then
+                                    %>
+                                    <p class="lead mb-4"><b>Restoring the backup copy of the settings was successful!</b></p>
+                                    <%
                                     if os.execute("reboot") then
                                         %>
-                                        <p class="lead mb-4"><b>Restoring the backup copy of the settings was successful!</b></p>
+                                        <p class="lead mb-4"><b>The device is being rebooted, it may take some time.</b></p>
+                                        <p class="lead mb-4">Wait <span id="wait_timer">30</span> second(s)...</p>
+                                        <script type="text/javascript">
+                                            (function($) {
+                                                $(document).ready(function() {
+                                                    var timer_value = $("#wait_timer").text();
+                                                    let timer_id = setInterval(function() {
+                                                        timer_value--;
+                                                        $("#wait_timer").text(timer_value);
+                                                        if(timer_value < 1) {
+                                                            clearInterval(timer_id);
+                                                            window.location.replace("/");
+                                                        }
+                                                    }, 1000);
+                                                });
+                                            })(jQuery); 
+                                        </script>
+                                        <%
+                                    else
+                                        %>
+                                        <p class="lead mb-4 text-danger">To apply changes, you need <a href="/cgi-bin/app.lua/system/reboot.lp">reboot</a> the device.</p>
                                         <%
                                     end
+                                else
+                                    %>
+                                    <p class="lead mb-4 text-danger"><b>Error restoring a backup copy of the settings!</b></p>
+                                    <%
                                 end
-                                %>
-                                <p class="lead mb-4"><b>The device is being rebooted, it may take some time.</b></p>
-                                <p class="lead mb-4">Wait <span id="wait_timer">30</span> second(s)...</p>
-                                <script type="text/javascript">
-                                    (function($) {
-                                        $(document).ready(function() {
-                                            var timer_value = $("#wait_timer").text();
-                                            let timer_id = setInterval(function() {
-                                                timer_value--;
-                                                $("#wait_timer").text(timer_value);
-                                                if(timer_value < 1) {
-                                                    clearInterval(timer_id);
-                                                    window.location.replace("/");
-                                                }
-                                            }, 1000);
-                                        });
-                                    })(jQuery); 
-                                </script>
-                                <%
                             else
                                 %>
-                                <p class="lead mb-4"><b>Invalid size of the backup file!</b></p>
+                                <p class="lead mb-4 text-danger"><b>Invalid size of the backup file!</b></p>
                                 <%
                             end
                             os.remove("/tmp/configs_backup.bin")
                         else
                             %>
-                            <p class="lead mb-4"><b><%= backup_error %>!</b></p>
+                            <p class="lead mb-4 text-danger"><b><%= backup_error %>!</b></p>
                             <%
                         end
                     else
                         %>
-                        <p class="lead mb-4"><b>No backup file selected!</b></p>
+                        <p class="lead mb-4 text-danger"><b>No backup file selected!</b></p>
                         <%
                     end
                 else

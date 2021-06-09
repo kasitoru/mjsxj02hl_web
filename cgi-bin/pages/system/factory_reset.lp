@@ -50,7 +50,7 @@ fnc = required.fnc
                         <%
                     else
                         %>
-                        <p class="lead mb-4"><b>Factory reset error!</b></p>
+                        <p class="lead mb-4 text-danger"><b>Factory reset error!</b></p>
                         <%
                     end
                     %>

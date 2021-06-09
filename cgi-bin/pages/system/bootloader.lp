@@ -66,7 +66,7 @@ fnc = required.fnc
                         <%
                     else
                         %>
-                        <p class="lead mb-4"><b>Error creating a bootloader file!</b></p>
+                        <p class="lead mb-4 text-danger"><b>Error creating a bootloader file!</b></p>
                         <%
                     end
                 elseif cgilua.POST.action == "bootloader_upgrade" then
@@ -76,45 +76,53 @@ fnc = required.fnc
                         if not bootloader_error then
                             if bootloader_length == 262144 then
                                 if fnc.app.flash_partition("/tmp/bootloader.bin", "/dev/mtd0") then
+                                    %>
+                                    <p class="lead mb-4"><b>Bootloader is successfully upgraded!</b></p>
+                                    <%
                                     if os.execute("reboot") then
                                         %>
-                                        <p class="lead mb-4"><b>Bootloader is successfully upgraded!</b></p>
+                                        <p class="lead mb-4"><b>The device is being rebooted, it may take some time.</b></p>
+                                        <p class="lead mb-4">Wait <span id="wait_timer">30</span> second(s)...</p>
+                                        <script type="text/javascript">
+                                            (function($) {
+                                                $(document).ready(function() {
+                                                    var timer_value = $("#wait_timer").text();
+                                                    let timer_id = setInterval(function() {
+                                                        timer_value--;
+                                                        $("#wait_timer").text(timer_value);
+                                                        if(timer_value < 1) {
+                                                            clearInterval(timer_id);
+                                                            window.location.replace("/");
+                                                        }
+                                                    }, 1000);
+                                                });
+                                            })(jQuery); 
+                                        </script>
+                                        <%
+                                    else
+                                        %>
+                                        <p class="lead mb-4 text-danger">To apply changes, you need <a href="/cgi-bin/app.lua/system/reboot.lp">reboot</a> the device.</p>
                                         <%
                                     end
+                                else
+                                    %>
+                                    <p class="lead mb-4 text-danger"><b>Bootloader update error!</b></p>
+                                    <%
                                 end
-                                %>
-                                <p class="lead mb-4"><b>The device is being rebooted, it may take some time.</b></p>
-                                <p class="lead mb-4">Wait <span id="wait_timer">30</span> second(s)...</p>
-                                <script type="text/javascript">
-                                    (function($) {
-                                        $(document).ready(function() {
-                                            var timer_value = $("#wait_timer").text();
-                                            let timer_id = setInterval(function() {
-                                                timer_value--;
-                                                $("#wait_timer").text(timer_value);
-                                                if(timer_value < 1) {
-                                                    clearInterval(timer_id);
-                                                    window.location.replace("/");
-                                                }
-                                            }, 1000);
-                                        });
-                                    })(jQuery); 
-                                </script>
-                                <%
                             else
                                 %>
-                                <p class="lead mb-4"><b>Invalid size of the bootloader file!</b></p>
+                                <p class="lead mb-4 text-danger"><b>Invalid size of the bootloader file!</b></p>
                                 <%
                             end
                             os.remove("/tmp/bootloader.bin")
                         else
                             %>
-                            <p class="lead mb-4"><b><%= bootloader_error %>!</b></p>
+                            <p class="lead mb-4 text-danger"><b><%= bootloader_error %>!</b></p>
                             <%
                         end
                     else
                         %>
-                        <p class="lead mb-4"><b>No bootloader file selected!</b></p>
+                        <p class="lead mb-4 text-danger"><b>No bootloader file selected!</b></p>
                         <%
                     end
                 else
