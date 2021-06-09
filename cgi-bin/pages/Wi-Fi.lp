@@ -16,7 +16,7 @@ os = required.os
                 current_settings = fnc.table.merge(default_settings, current_settings)
             end
             -- Settings form and logic
-            if fnc.string.is_empty(cgilua.POST.action) then
+            if fnc.string.is_empty(cgilua.POST.action_save) and fnc.string.is_empty(cgilua.POST.action_defaults) then
                 %>
                 <p class="lead mb-4"><b>Wi-Fi configuration</b></p>
                 <form method="POST" id="settings_form" class="d-grid gap-2 justify-content-sm-center">
@@ -27,28 +27,15 @@ os = required.os
                     </div>
                     <div class="form-group text-start">
                         <label for="psk" class="form-label">Network key (password):</label>
-                        <input type="password" class="form-control" id="psk" name="psk" placeholder="<%= default_settings.network.psk %>" value="<%= current_settings.network.psk %>">
+                        <input type="password" class="form-control" id="psk" name="psk" placeholder="<%= default_settings.network.psk %>" value="<%= current_settings.network.psk %>" data-toggle="password">
                     </div>
                     <br>
-                    <input type="hidden" id="action_value" name="action" value="">
-                    <input type="button" id="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
-                    <input type="button" id="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults (AP)">
+                    <input type="submit" name="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
+                    <input type="submit" name="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults (AP)">
                 </form>
-                <script type="text/javascript">
-                    (function($) {
-                        $(document).ready(function() {
-                            var settings_form = $("form#settings_form")
-                            $(settings_form).find("input[type=button]").filter("#action_save,#action_defaults").on("click", function(e) {
-                                $(settings_form).find("input#action_value").val(e.target.id);
-                                settings_form.submit();
-                            });
-                            $(settings_form).find("input[type=password]").password();
-                        });
-                    })(jQuery); 
-                </script>
                 <%
             else
-                if cgilua.POST.action == "action_save" then
+                if not fnc.string.is_empty(cgilua.POST.action_save) then
                     current_settings.network.scan_ssid = lua.tonumber(cgilua.POST.scan_ssid or default_settings.network.scan_ssid)
                     if current_settings.network.scan_ssid < 0 then current_settings.network.scan_ssid = 0 end
                     if current_settings.network.scan_ssid > 1 then current_settings.network.scan_ssid = 1 end
@@ -64,7 +51,7 @@ os = required.os
                         <p class="lead mb-4 text-danger"><b><%= wpa_error %>!</b></p>
                         <%
                     end
-                elseif cgilua.POST.action == "action_defaults" then
+                elseif not fnc.string.is_empty(cgilua.POST.action_defaults) then
                     local wpa_result, wpa_error = os.remove(config_file)
                     if wpa_result then
                         %>
@@ -84,28 +71,29 @@ os = required.os
                     <p class="lead mb-4"><b>The device is being rebooted, it may take some time.</b></p>
                     <p class="lead mb-4">Wait <span id="wait_timer">30</span> second(s)...</p>
                     <script type="text/javascript">
-                        (function($) {
-                            $(document).ready(function() {
-                                var timer_value = $("#wait_timer").text();
+                        (function() {
+                            document.addEventListener("DOMContentLoaded", function(event) {
+                                var timer_element = document.getElementById("wait_timer");
+                                var timer_value = timer_element.textContent || timer_element.innerText;
                                 let timer_id = setInterval(function() {
                                     timer_value--;
-                                    $("#wait_timer").text(timer_value);
+                                    timer_element.textContent = timer_value;
                                     if(timer_value < 1) {
                                         clearInterval(timer_id);
                                         window.location.replace("/");
                                     }
                                 }, 1000);
                             });
-                        })(jQuery); 
+                        })();
                     </script>
                     <%
                 else
                     %>
-                    <p class="lead mb-4 text-danger">To apply changes, you need <a href="/cgi-bin/app.lua/system/reboot.lp">reboot</a> the device.</p>
+                    <p class="lead mb-4 text-danger">To apply changes, you need reboot the device.</p>
                     <%
                 end
                 %>
-                <a href="/cgi-bin/app.lua/Wi-Fi.lp">Return to previous page</a>
+                <a href="/">Return to main page</a>
                 <%
             end
             %>

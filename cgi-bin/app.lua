@@ -8,7 +8,7 @@ local fnc = required().fnc
 local page_info = fnc.app.default_page_info()
 
 if not fnc.file.exists("/configs/wpa_supplicant.conf") then
-    page_info.file = "initial.lp"
+    page_info.file = "Wi-Fi.lp"
     page_info.title = "Setup"
     cgilua.htmlheader()
     cgilua.lp.include("pages/initial.lp", {

@@ -71,7 +71,7 @@ end
         <link rel="icon" href="/favicon.ico">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
-        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="/css/style.css">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
