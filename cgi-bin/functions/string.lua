@@ -10,7 +10,7 @@ end
 
 -- Check if the string is empty
 functions.string.is_empty = function(str)
-    return (str == nil or str == "")
+    return (str == nil or (functions.string.is_string(str) and str == ""))
 end
 
 -- Escapes special pattern characters
