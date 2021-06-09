@@ -6,26 +6,31 @@ package.loaded[...] = functions.file
 
 -- Check if the file (or dir) exists
 functions.file.exists = function(filename)
-    if io.open(filename) then
-        return true
-    else
-        return false
+    if functions.string.is_string(filename) then
+        if io.open(filename) then
+            return true
+        end
     end
+    return false
 end
 
 -- Check is a dir and it exists
 functions.file.is_dir = function(dirname)
-    dirname = functions.string.rtrim(dirname, "/")
-    if functions.file.exists(dirname .. "/") then
-        return true
-    else
-        return false
+    if functions.string.is_string(dirname) then
+        dirname = functions.string.rtrim(dirname, "/")
+        if functions.file.exists(dirname .. "/") then
+            return true
+        end
     end
+    return false
 end
 
 -- Check is a dir and it exists
 functions.file.is_file = function(filename)
-    return (functions.file.exists(filename) and (not functions.file.is_dir(filename)))
+    if functions.string.is_string(filename) then
+        return (functions.file.exists(filename) and (not functions.file.is_dir(filename)))
+    end
+    return false
 end
 
 -- Checks if the passed argument is a file descriptor
@@ -38,21 +43,25 @@ functions.file.save_post = function(post_file, filename)
     local file_length = 0
     local file_error = nil
     if (post_file and post_file.file and functions.file.is_file_descriptor(post_file.file)) then
-        local out_file, file_error = io.open(filename, "wb")
-        if out_file then
-            repeat
-                local bytes = post_file.file:read(1024)
-                if bytes then
-                    out_file:write(bytes)
-                else
-                    out_file:flush()
+        if functions.string.is_string(filename) then
+            local out_file, file_error = io.open(filename, "wb")
+            if out_file then
+                repeat
+                    local bytes = post_file.file:read(1024)
+                    if bytes then
+                        out_file:write(bytes)
+                    else
+                        out_file:flush()
+                    end
+                until not bytes
+                file_length, file_error = out_file:seek()
+                out_file:close()
+                if file_error then
+                    os.remove(filename)
                 end
-            until not bytes
-            file_length, file_error = out_file:seek()
-            out_file:close()
-            if file_error then
-                os.remove(filename)
             end
+        else
+            file_error = "Incorrect filename"
         end
     else
         file_error = "Incorrect file descriptor"
@@ -64,10 +73,14 @@ end
 functions.file.get_contents = function(filename)
     local file_data = ""
     local file_error = nil
-    local file, file_error = io.open(filename, "rb")
-    if file then
-        file_data = file:read("*a")
-        file:close()
+    if functions.string.is_string(filename) then
+        local file, file_error = io.open(filename, "rb")
+        if file then
+            file_data = file:read("*a")
+            file:close()
+        end
+    else
+        file_error = "Incorrect filename"
     end
     return file_data, file_error
 end
@@ -133,10 +146,14 @@ end
 -- Read wpa_supplicant.conf to table
 functions.file.read_wpa_supplicant = function(filename)
     local wpa_result, wpa_content, wpa_error = false, {}, nil
-    local wpa_file, wpa_error = io.open(filename, "r")
-    if wpa_file then
-        wpa_content, wpa_error = functions.file.parse_wpa_supplicant(wpa_file)
-        wpa_file:close()
+    if functions.string.is_string(filename) then
+        local wpa_file, wpa_error = io.open(filename, "r")
+        if wpa_file then
+            wpa_content, wpa_error = functions.file.parse_wpa_supplicant(wpa_file)
+            wpa_file:close()
+        end
+    else
+        wpa_error = "Incorrect filename"
     end
     return wpa_content, wpa_error
 end
@@ -158,7 +175,7 @@ functions.file.build_wpa_supplicant = function(tbl, _tab)
             end
         end
     else
-        wpa_error = "Parameter 2 is a " .. type(tbl) .. " instead of a table"
+        wpa_error = "Incorrect table"
     end
     return wpa_content, wpa_error
 end
@@ -166,14 +183,22 @@ end
 -- Save wpa_supplicant.conf from table
 functions.file.save_wpa_supplicant = function(filename, tbl)
     local wpa_result, wpa_content, wpa_error = false, "", nil
-    local wpa_file, wpa_error = io.open(filename, "w")
-    if wpa_file then
-        wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl)
-        if not wpa_error then
-            wpa_file:write(wpa_content)
-            wpa_result = true
+    if functions.string.is_string(filename) then
+        if type(tbl) == "table" then
+            local wpa_file, wpa_error = io.open(filename, "w")
+            if wpa_file then
+                wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl)
+                if not wpa_error then
+                    wpa_file:write(wpa_content)
+                    wpa_result = true
+                end
+                wpa_file:close()
+            end
+        else
+            wpa_error = "Incorrect table"
         end
-        wpa_file:close()
+    else
+        wpa_error = "Incorrect filename"
     end
     return wpa_result, wpa_error
 end
