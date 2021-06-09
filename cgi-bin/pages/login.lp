@@ -1,4 +1,6 @@
 <%
+fnc = required.fnc
+
 -- Forbidding logged in user
 if cgilua.authentication.username() then
     cgilua.redirect("/")
@@ -39,7 +41,7 @@ end
     <form method="POST">
         <h1 class="h3 mb-3 fw-normal">Authentification:</h1>
         <%
-        if page_info.message ~= nil and page_info.message ~= "" then
+        if not fnc.string.is_empty(page_info.message) then
             cgilua.print([[<div class="alert alert-danger" role="alert">]])
             cgilua.print(page_info.message)
             cgilua.print([[</div>]])

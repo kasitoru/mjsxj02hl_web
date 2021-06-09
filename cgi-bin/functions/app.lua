@@ -2,6 +2,7 @@ local functions = {
     app = {},
     file = require "functions.file",
     string = require "functions.string",
+    number = require "functions.number",
 }
 package.loaded[...] = functions.app
 
@@ -123,7 +124,7 @@ end
 
 -- Sleep N seconds
 functions.app.sleep = function(n)
-    if type(n) == "number" then
+    if functions.number.is_number(n) then
         if os.execute("sleep " .. n) then
             return true
         end

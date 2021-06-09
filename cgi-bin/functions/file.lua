@@ -2,6 +2,7 @@ local functions = {
     file = {},
     string = require "functions.string",
     table = require "functions.table",
+    number = require "functions.number",
 }
 package.loaded[...] = functions.file
 
@@ -169,7 +170,7 @@ functions.file.build_wpa_supplicant = function(tbl, _tab)
                 wpa_content = wpa_content .. string.rep("    ", _tab) .. key .. "={\r\n";
                 wpa_content = wpa_content .. functions.file.build_wpa_supplicant(value, _tab + 1)
                 wpa_content = wpa_content .. string.rep("    ", _tab) .. "}\r\n";
-            elseif type(value) == "number" then
+            elseif functions.number.is_number(value) then
                 wpa_content = wpa_content .. string.rep("    ", _tab) .. key .. "=" .. value .. "\r\n";
             else
                 wpa_content = wpa_content .. string.rep("    ", _tab) .. key .. '="' .. tostring(value) .. '"\r\n';

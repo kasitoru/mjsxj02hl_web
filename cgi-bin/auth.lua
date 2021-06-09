@@ -20,26 +20,29 @@ local methods = {
     shadow = {
         check = function(username, password)
             local file = io.open("/etc/shadow", "r")
-            if not file then return false, "Can't open file /etc/shadow!" end
-            local user_found = false
-            for line in file:lines() do
-                local counter = 0
-                for part in string.gmatch(line, '([^:]+)') do
-                    if (counter == 0) and (part == username) then
-                        user_found = true
-                    elseif (counter == 1) and user_found then
-                        local salt = string.sub(part, 1, 2)
-                        if part == ldes.crypt(password, salt) then
-                            return true
-                        end
-                        break
-                    else break end
-                    counter = counter + 1
+            if fnc.file.is_file_descriptor(file) then
+                local user_found = false
+                for line in file:lines() do
+                    local counter = 0
+                    for part in string.gmatch(line, '([^:]+)') do
+                        if (counter == 0) and (part == username) then
+                            user_found = true
+                        elseif (counter == 1) and user_found then
+                            local salt = string.sub(part, 1, 2)
+                            if part == ldes.crypt(password, salt) then
+                                return true
+                            end
+                            break
+                        else break end
+                        counter = counter + 1
+                    end
+                    if user_found then break end
                 end
-                if user_found then break end
+                file:close()
+                return false, "Wrong user/password combination!"
+            else
+                return false, "Can't open file /etc/shadow!"
             end
-            file:close()
-            return false, "Wrong user/password combination!"
         end
     }
 }
