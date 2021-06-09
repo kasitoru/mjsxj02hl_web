@@ -1,6 +1,5 @@
 <%
 lua = required.lua
-lip = required.lip
 fnc = required.fnc
 os = required.os
 %>
