@@ -4,6 +4,11 @@ local functions = {
 }
 package.loaded[...] = functions.table
 
+-- Checks if the passed argument is a table
+functions.table.is_table = function(tbl)
+    return (type(tbl) == "table")
+end
+
 -- Get table value by key
 functions.table.value_by_key = function(tbl, key)
     if (type(tbl) == 'table') and key then
