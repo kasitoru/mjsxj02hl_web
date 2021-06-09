@@ -55,7 +55,7 @@ os = required.os
                     local wpa_result, wpa_error = os.remove(config_file)
                     if wpa_result then
                         %>
-                        <p class="lead mb-4"><b>Alarm successfully reset to factory settings!</b></p>
+                        <p class="lead mb-4"><b>Wi-Fi configuration was successfully reset to factory settings!</b></p>
                         <%
                     else
                         %>
