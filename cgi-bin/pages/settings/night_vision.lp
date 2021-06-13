@@ -43,12 +43,8 @@ fnc = required.fnc
                 <%
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
-                    current_settings.night.mode = lua.tonumber(cgilua.POST.mode or default_settings.night.mode)
-                    if current_settings.night.mode < 0 then current_settings.night.mode = 0 end
-                    if current_settings.night.mode > 2 then current_settings.night.mode = 2 end
-                    current_settings.night.gray = lua.tonumber(cgilua.POST.gray or default_settings.night.gray)
-                    if current_settings.night.gray < 0 then current_settings.night.gray = 0 end
-                    if current_settings.night.gray > 2 then current_settings.night.gray = 2 end
+                    current_settings.night.mode = fnc.number.boundaries(lua.tonumber(cgilua.POST.mode or default_settings.night.mode), 0, 2)
+                    current_settings.night.gray = fnc.number.boundaries(lua.tonumber(cgilua.POST.gray or default_settings.night.gray), 0, 2)
                     %>
                     <p class="lead mb-4"><b>Night vision settings saved successfully!</b></p>
                     <%

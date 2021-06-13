@@ -41,9 +41,7 @@ fnc = required.fnc
                 <%
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
-                    current_settings.logger.level = lua.tonumber(cgilua.POST.level or default_settings.logger.level)
-                    if current_settings.logger.level < 0 then current_settings.logger.level = 0 end
-                    if current_settings.logger.level > 4 then current_settings.logger.level = 4 end
+                    current_settings.logger.level = fnc.number.boundaries(lua.tonumber(cgilua.POST.level or default_settings.logger.level), 0, 4)
                     current_settings.logger.file  = (cgilua.POST.file or default_settings.logger.file)
                     %>
                     <p class="lead mb-4"><b>Debugging settings saved successfully!</b></p>

@@ -63,16 +63,12 @@ fnc = required.fnc
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
                     -- Motion
-                    current_settings.alarm.motion_sens = lua.tonumber(cgilua.POST.motion_sens or default_settings.alarm.motion_sens)
-                    if current_settings.alarm.motion_sens < 1 then current_settings.alarm.motion_sens = 1 end
-                    if current_settings.alarm.motion_sens > 255 then current_settings.alarm.motion_sens = 255 end
+                    current_settings.alarm.motion_sens = fnc.number.boundaries(lua.tonumber(cgilua.POST.motion_sens or default_settings.alarm.motion_sens), 1, 255)
                     current_settings.alarm.motion_timeout = lua.tonumber(cgilua.POST.motion_timeout or default_settings.alarm.motion_timeout)
                     current_settings.alarm.motion_detect_exec = (cgilua.POST.motion_detect_exec or default_settings.alarm.motion_detect_exec)
                     current_settings.alarm.motion_lost_exec = (cgilua.POST.motion_lost_exec or default_settings.alarm.motion_lost_exec)
                     -- Humanoid
-                    current_settings.alarm.humanoid_sens = lua.tonumber(cgilua.POST.humanoid_sens or default_settings.alarm.humanoid_sens)
-                    if current_settings.alarm.humanoid_sens < 1 then current_settings.alarm.humanoid_sens = 1 end
-                    if current_settings.alarm.humanoid_sens > 255 then current_settings.alarm.humanoid_sens = 255 end
+                    current_settings.alarm.humanoid_sens = fnc.number.boundaries(lua.tonumber(cgilua.POST.humanoid_sens or default_settings.alarm.humanoid_sens), 1, 255)
                     current_settings.alarm.humanoid_timeout = lua.tonumber(cgilua.POST.humanoid_timeout or default_settings.alarm.humanoid_timeout)
                     current_settings.alarm.humanoid_detect_exec = (cgilua.POST.humanoid_detect_exec or default_settings.alarm.humanoid_detect_exec)
                     current_settings.alarm.humanoid_lost_exec = (cgilua.POST.humanoid_lost_exec or default_settings.alarm.humanoid_lost_exec)

@@ -64,9 +64,7 @@ fnc = required.fnc
                     current_settings.mqtt.username = (cgilua.POST.username or default_settings.mqtt.username)
                     current_settings.mqtt.password = (cgilua.POST.password or default_settings.mqtt.password)
                     current_settings.mqtt.topic    = (cgilua.POST.topic or default_settings.mqtt.topic)
-                    current_settings.mqtt.qos      = lua.tonumber(cgilua.POST.qos or default_settings.mqtt.qos)
-                    if current_settings.mqtt.qos < 0 then current_settings.mqtt.qos = 0 end
-                    if current_settings.mqtt.qos > 2 then current_settings.mqtt.qos = 2 end
+                    current_settings.mqtt.qos      = fnc.number.boundaries(lua.tonumber(cgilua.POST.qos or default_settings.mqtt.qos), 0, 2)
                     if cgilua.POST.retain then current_settings.mqtt.retain = true else current_settings.mqtt.retain = false end
                     %>
                     <p class="lead mb-4"><b>MQTT settings saved successfully!</b></p>

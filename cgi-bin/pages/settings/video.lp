@@ -46,9 +46,7 @@ fnc = required.fnc
                 <%
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
-                    current_settings.video.type = lua.tonumber(cgilua.POST.type or default_settings.video.type)
-                    if current_settings.video.type < 1 then current_settings.video.type = 1 end
-                    if current_settings.video.type > 2 then current_settings.video.type = 2 end
+                    current_settings.video.type = fnc.number.boundaries(lua.tonumber(cgilua.POST.type or default_settings.video.type), 1, 2)
                     if cgilua.POST.flip then current_settings.video.flip = true else current_settings.video.flip = false end
                     if cgilua.POST.mirror then current_settings.video.mirror = true else current_settings.video.mirror = false end
                     %>

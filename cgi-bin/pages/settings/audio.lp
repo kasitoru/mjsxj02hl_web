@@ -31,9 +31,7 @@ fnc = required.fnc
                 <%
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
-                    current_settings.audio.volume = lua.tonumber(cgilua.POST.volume or default_settings.audio.volume)
-                    if current_settings.audio.volume < 0 then current_settings.audio.volume = 0 end
-                    if current_settings.audio.volume > 100 then current_settings.audio.volume = 100 end
+                    current_settings.audio.volume = fnc.number.boundaries(lua.tonumber(cgilua.POST.volume or default_settings.audio.volume), 0, 100)
                     %>
                     <p class="lead mb-4"><b>Audio settings saved successfully!</b></p>
                     <%
