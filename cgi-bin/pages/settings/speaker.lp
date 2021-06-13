@@ -21,6 +21,13 @@ fnc = required.fnc
                 <p class="lead mb-4"><b>Speaker settings</b></p>
                 <form method="POST" id="settings_form" class="d-grid gap-2 justify-content-sm-center">
                     <div class="form-group text-start">
+                        <label for="type" class="form-label">Default file format:</label>
+                        <select class="form-select" id="type" name="type">
+                            <option value="1"<% if current_settings.speaker.type == 1 then cgilua.print(" selected") end %>>PCM (WAV, 8000 hz, 16-bit, mono)</option>
+                            <option value="2"<% if current_settings.speaker.type == 2 then cgilua.print(" selected") end %>>G711 (A-Law, 8000 hz, 16-bit, mono)</option>
+                        </select>
+                    </div>
+                    <div class="form-group text-start">
                         <label for="volume" class="form-label">Volume level (0-100):</label>
                         <input type="text" class="form-control" id="volume" name="volume" placeholder="<%= default_settings.speaker.volume %>" value="<%= current_settings.speaker.volume %>">
                     </div>
@@ -31,9 +38,8 @@ fnc = required.fnc
                 <%
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
-                    current_settings.speaker.volume = lua.tonumber(cgilua.POST.volume or default_settings.speaker.volume)
-                    if current_settings.speaker.volume < 0 then current_settings.speaker.volume = 0 end
-                    if current_settings.speaker.volume > 100 then current_settings.speaker.volume = 100 end
+                    current_settings.speaker.type = fnc.number.boundaries(lua.tonumber(cgilua.POST.type or default_settings.speaker.type), 1, 2)
+                    current_settings.speaker.volume = fnc.number.boundaries(lua.tonumber(cgilua.POST.volume or default_settings.speaker.volume), 0, 100)
                     %>
                     <p class="lead mb-4"><b>Speaker settings saved successfully!</b></p>
                     <%

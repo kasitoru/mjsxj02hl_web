@@ -34,6 +34,7 @@ functions.app.default_settings = function()
         },
         speaker = {
             volume               = 70,          -- Volume (0-100)
+            type                 = 1,           -- Default file format (1 = PCM, 2 = G711)
         },
         alarm = {
             motion_sens          = 150,         -- Motion sensitivity (1-255)
