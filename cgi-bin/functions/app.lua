@@ -86,14 +86,14 @@ end
 
 -- Restart mjsxj02hl application
 functions.app.restart = function()
-    if os.execute("killall mjsxj02hl") then
-        if functions.app.sleep(3) then
-            if os.execute("mjsxj02hl &") then
-                return true
-            end
-        end
+    -- Kill application
+    os.execute("killall mjsxj02hl")
+    -- Waiting for completion
+    while os.execute("killall -0 mjsxj02hl") do
+        functions.app.sleep(1)
     end
-    return false
+    -- Run application
+    return os.execute("mjsxj02hl & sleep 0.1")
 end
 
 -- Get page title by filename
