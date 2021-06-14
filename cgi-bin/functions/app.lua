@@ -84,18 +84,6 @@ functions.app.exclude_pages = function()
     }
 end
 
--- Restart mjsxj02hl application
-functions.app.restart = function()
-    if os.execute("killall mjsxj02hl") then
-        if functions.app.sleep(3) then
-            if os.execute("mjsxj02hl &") then
-                return true
-            end
-        end
-    end
-    return false
-end
-
 -- Get page title by filename
 functions.app.title_by_filename = function(filename)
     if functions.string.is_string(filename) then

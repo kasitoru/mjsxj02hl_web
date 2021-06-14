@@ -45,7 +45,7 @@ fnc = required.fnc
                     return
                 end
                 lip.save(config_file, current_settings);
-                if not fnc.app.restart() then
+                if not os.execute("restart_app.sh &") then
                     %>
                     <p class="lead mb-4 text-danger">Error restarting the MJSXJ02HL application!<br>Please <a href="/cgi-bin/app.lua/system/reboot.lp">reboot</a> your device manually.</p>
                     <%
