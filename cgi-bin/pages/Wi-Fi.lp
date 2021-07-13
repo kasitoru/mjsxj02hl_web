@@ -8,7 +8,7 @@ os = required.os
         <div class="text-center">
             <%
             -- Get current and defaults settings
-            local config_file = "/configs/wpa_supplicant.conf"
+            local config_file = "/etc/wpa_supplicant.conf"
             local default_settings = fnc.app.default_wpa_supplicant()
             local current_settings = default_settings
             if fnc.file.is_file(config_file) then
