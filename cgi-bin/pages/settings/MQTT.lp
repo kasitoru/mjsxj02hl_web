@@ -21,7 +21,11 @@ fnc = required.fnc
                 <p class="lead mb-4"><b>MQTT settings</b></p>
                 <form method="POST" id="settings_form" class="d-grid gap-2 justify-content-sm-center">
                     <div class="form-group text-start">
-                        <label for="server" class="form-label">Server address (empty for disable):</label>
+                        <input type="checkbox" class="form-check-input" id="enable" name="enable"<% if current_settings.mqtt.enable then cgilua.print(" checked") end %>>
+                        <label for="enable" class="form-check-label">Enable MQTT client</label>
+                    </div>
+                    <div class="form-group text-start">
+                        <label for="server" class="form-label">Server address:</label>
                         <input type="text" class="form-control" id="server" name="server" placeholder="<%= default_settings.mqtt.server %>" value="<%= current_settings.mqtt.server %>">
                     </div>
                     <div class="form-group text-start">
@@ -59,6 +63,7 @@ fnc = required.fnc
                 <%
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
+                    if cgilua.POST.enable then current_settings.mqtt.enable = true else current_settings.mqtt.enable = false end
                     current_settings.mqtt.server   = (cgilua.POST.server or default_settings.mqtt.server)
                     current_settings.mqtt.port     = lua.tonumber(cgilua.POST.port or default_settings.mqtt.port)
                     current_settings.mqtt.username = (cgilua.POST.username or default_settings.mqtt.username)
