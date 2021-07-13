@@ -204,14 +204,9 @@ functions.file.save_wpa_supplicant = function(filename, tbl)
     local wpa_result, wpa_content, wpa_error = false, "", nil
     if functions.string.is_string(filename) then
         if functions.table.is_table(tbl) then
-            local wpa_file, wpa_error = io.open(filename, "w")
-            if wpa_file then
-                wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl)
-                if not wpa_error then
-                    wpa_file:write(wpa_content)
-                    wpa_result = true
-                end
-                wpa_file:close()
+            wpa_content, wpa_error = functions.file.build_wpa_supplicant(tbl)
+            if not wpa_error then
+                wpa_result, wpa_error = functions.file.put_contents(filename, wpa_content)
             end
         else
             wpa_error = "Incorrect table"
