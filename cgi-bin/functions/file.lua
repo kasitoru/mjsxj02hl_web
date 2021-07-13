@@ -87,6 +87,23 @@ functions.file.get_contents = function(filename)
     return file_data, file_error
 end
 
+-- Put file contents
+functions.file.put_contents = function(filename, content)
+    local result = false
+    local file_error = nil
+    if functions.string.is_string(filename) then
+        local file, file_error = io.open(filename, "wb")
+        if file then
+            file:write(content)
+            file:close()
+            result = true
+        end
+    else
+        file_error = "Incorrect filename"
+    end
+    return result, file_error
+end
+
 -- Get filename from path
 functions.file.name_from_path = function(filepath)
     if not functions.string.is_empty(filepath) then
