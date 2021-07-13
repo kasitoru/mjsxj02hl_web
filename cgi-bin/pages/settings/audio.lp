@@ -24,6 +24,14 @@ fnc = required.fnc
                         <label for="volume" class="form-label">Volume level (0-100):</label>
                         <input type="text" class="form-control" id="volume" name="volume" placeholder="<%= default_settings.audio.volume %>" value="<%= current_settings.audio.volume %>">
                     </div>
+                    <div class="form-group text-start">
+                        <input type="checkbox" class="form-check-input" id="primary_enable" name="primary_enable"<% if current_settings.audio.primary_enable then cgilua.print(" checked") end %>>
+                        <label for="primary_enable" class="form-check-label">Enable for primary channel</label>
+                    </div>
+                    <div class="form-group text-start">
+                        <input type="checkbox" class="form-check-input" id="secondary_enable" name="secondary_enable"<% if current_settings.audio.secondary_enable then cgilua.print(" checked") end %>>
+                        <label for="secondary_enable" class="form-check-label">Enable for secondary channel</label>
+                    </div>
                     <br>
                     <input type="submit" name="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
                     <input type="submit" name="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
@@ -32,6 +40,8 @@ fnc = required.fnc
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
                     current_settings.audio.volume = fnc.number.boundaries(lua.tonumber(cgilua.POST.volume or default_settings.audio.volume), 0, 100)
+                    if cgilua.POST.enable then current_settings.audio.primary_enable = true else current_settings.audio.primary_enable = false end
+                    if cgilua.POST.enable then current_settings.audio.secondary_enable = true else current_settings.audio.secondary_enable = false end
                     %>
                     <p class="lead mb-4"><b>Audio settings saved successfully!</b></p>
                     <%
