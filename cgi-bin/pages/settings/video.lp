@@ -32,7 +32,6 @@ fnc = required.fnc
                         <input type="checkbox" class="form-check-input" id="mirror" name="mirror"<% if current_settings.video.mirror then cgilua.print(" checked") end %>>
                         <label for="mirror" class="form-check-label">Mirror</label>
                     </div>
-                    
                     <p class="lead mb-0">Primary channel</p>
                     <div class="form-group text-start">
                         <input type="checkbox" class="form-check-input" id="primary_enable" name="primary_enable"<% if current_settings.video.primary_enable then cgilua.print(" checked") end %>>
