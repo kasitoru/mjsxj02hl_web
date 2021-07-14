@@ -1,0 +1,55 @@
+diff --git a/src/cgilua/main.lua b/src/cgilua/main.lua
+index 8469efc..0b11314 100755
+--- a/src/cgilua/main.lua
++++ b/src/cgilua/main.lua
+@@ -284,6 +284,8 @@ local function build_library_objects(enviroment, response)
+ 	-- @return String in URL format.
+ 	----------------------------------------------------------------------------
+ 	M.mkabsoluteurl = function  (path, protocol)
++		--[[
++		-- SERVER_NAME and SERVER_PORT is empty for BusyBox httpd
+ 		protocol = protocol or "http"
+ 		if path:sub(1,1) ~= '/' then
+ 			path = '/'..path
+@@ -293,6 +295,8 @@ local function build_library_objects(enviroment, response)
+ 			M.servervariable"SERVER_NAME",
+ 			M.servervariable"SERVER_PORT",
+ 			path)
++		--]]
++		return path
+ 	end
+ 
+ 	----------------------------------------------------------------------------
+@@ -533,9 +537,9 @@ local function build_library_objects(enviroment, response)
+ 		M.Response.write ("<html><head><title>CGILua Error</title></head><body>" .. msg .. "</body></html>")
+ 	end
+ 	L.erroroutput = L.default_erroroutput
+-	L.default_maxfilesize = 512 * 1024
++	L.default_maxfilesize = 20733952
+ 	L.maxfilesize = L.default_maxfilesize
+-	L.default_maxinput = 1024 * 1024
++	L.default_maxinput = 20733952
+ 	L.maxinput = L.default_maxinput
+ 	L.script_path = false
+ 
+diff --git a/src/launchers/cgilua.cgi b/src/launchers/cgilua.cgi
+index 0480f50..f1f2fb2 100755
+--- a/src/launchers/cgilua.cgi
++++ b/src/launchers/cgilua.cgi
+@@ -1,7 +1,7 @@
+-#!/usr/bin/env lua
++#!/usr/app/bin/lua
+ 
+ -- CGILua (SAPI) launcher, extracts script to launch
+--- either from the command line (use #!cgilua in the script)
++-- either from the command line (use #!cgilua.cgi in the script)
+ -- or from SCRIPT_FILENAME/PATH_TRANSLATED
+  
+ pcall(require, "luarocks.require")
+@@ -21,4 +21,4 @@ local function cgi_loader(wsapi_env)
+   return cgilua.main(wsapi_env, res)
+ end 
+  
+-cgi.run(cgi_loader)
+\ No newline at end of file
++cgi.run(cgi_loader)

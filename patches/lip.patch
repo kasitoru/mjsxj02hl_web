@@ -1,0 +1,37 @@
+diff --git a/LIP.lua b/LIP.lua
+index aecdb14..4c96e08 100644
+--- a/LIP.lua
++++ b/LIP.lua
+@@ -34,13 +34,14 @@ function LIP.load(fileName)
+ 	local data = {};
+ 	local section;
+ 	for line in file:lines() do
+-		local tempSection = line:match('^%[([^%[%]]+)%]$');
++		local tempSection = line:match('^%[([^%[%]]+)%][\r]?$');
+ 		if(tempSection)then
+ 			section = tonumber(tempSection) and tonumber(tempSection) or tempSection;
+ 			data[section] = data[section] or {};
+ 		end
+-		local param, value = line:match('^([%w|_]+)%s-=%s-(.+)$');
++		local param, value = line:match('^([%w|_]+)%s*=%s*(.*)[\r]?$');
+ 		if(param and value ~= nil)then
++			value = value:match('^(.-)%s-;.-$') or value:match('^(.-)%s-$');
+ 			if(tonumber(value))then
+ 				value = tonumber(value);
+ 			elseif(value == 'true')then
+@@ -64,7 +65,7 @@ end
+ function LIP.save(fileName, data)
+ 	assert(type(fileName) == 'string', 'Parameter "fileName" must be a string.');
+ 	assert(type(data) == 'table', 'Parameter "data" must be a table.');
+-	local file = assert(io.open(fileName, 'w+b'), 'Error loading file :' .. fileName);
++	local file = assert(io.open(fileName, 'w'), 'Error loading file :' .. fileName);
+ 	local contents = '';
+ 	for section, param in pairs(data) do
+ 		contents = contents .. ('[%s]\n'):format(section);
+@@ -77,4 +78,4 @@ function LIP.save(fileName, data)
+ 	file:close();
+ end
+ 
+-return LIP;
+\ No newline at end of file
++return LIP;
