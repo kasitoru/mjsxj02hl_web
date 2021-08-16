@@ -74,6 +74,15 @@ fnc = required.fnc
                             <option value="3"<% if current_settings.osd.datetime_size == 3 then cgilua.print(" selected") end %>>Huge (+3)</option>
                         </select>
                     </div>
+                    <p class="lead mb-0">Selecting objects</p>
+                    <div class="form-group text-start">
+                        <input type="checkbox" class="form-check-input" id="motion" name="motion"<% if current_settings.osd.motion then cgilua.print(" checked") end %>>
+                        <label for="motion" class="form-check-label">Motion</label>
+                    </div>
+                    <div class="form-group text-start">
+                        <input type="checkbox" class="form-check-input" id="humanoid" name="humanoid"<% if current_settings.osd.humanoid then cgilua.print(" checked") end %>>
+                        <label for="humanoid" class="form-check-label">Humanoid</label>
+                    </div>
                     <br>
                     <input type="submit" name="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
                     <input type="submit" name="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
@@ -90,6 +99,8 @@ fnc = required.fnc
                     current_settings.osd.datetime_x = fnc.number.boundaries(lua.tonumber(cgilua.POST.datetime_x or default_settings.osd.datetime_x), 0, 1920)
                     current_settings.osd.datetime_y = fnc.number.boundaries(lua.tonumber(cgilua.POST.datetime_y or default_settings.osd.datetime_y), 0, 1080)
                     current_settings.osd.datetime_size = fnc.number.boundaries(lua.tonumber(cgilua.POST.datetime_size or default_settings.osd.datetime_size), -3, 3)
+                    if cgilua.POST.motion then current_settings.osd.motion = true else current_settings.osd.motion = false end
+                    if cgilua.POST.humanoid then current_settings.osd.humanoid = true else current_settings.osd.humanoid = false end
                     %>
                     <p class="lead mb-4"><b>OSD settings saved successfully!</b></p>
                     <%
