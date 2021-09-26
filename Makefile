@@ -26,6 +26,7 @@ cgilua:
 	git clone "https://github.com/keplerproject/cgilua" "$(TMPDIR)/cgilua"
 	git apply --directory="$(TMPDIR)/cgilua" "$(PATCHD)/cgilua.patch"
 	cp -f $(TMPDIR)/cgilua/src/launchers/cgilua.cgi $(BINDIR)/
+	dos2unix $(BINDIR)/cgilua.cgi
 	cp -rf $(TMPDIR)/cgilua/src/cgilua $(LUAMOD)
 
 coxpcall:
