@@ -13,7 +13,7 @@ sudo ./arm-himix100-linux.install
 Others:
 
 ```bash
-sudo apt install git
+sudo apt install git dos2unix
 ```
 
 ## Build
