@@ -44,6 +44,7 @@ fnc = required.fnc
                             %>
                             <p class="lead mb-4"><b>Firmware has been successfully saved to the memory card!</b></p>
                             <%
+                            --[[
                             if os.execute("reboot") then
                                 %>
                                 <p class="lead mb-4"><b>The device is being rebooted, it may take some time.</b></p>
@@ -70,6 +71,7 @@ fnc = required.fnc
                                 <p class="lead mb-4 text-danger">To apply changes, you need <a href="/cgi-bin/app.lua/system/reboot.lp">reboot</a> the device.</p>
                                 <%
                             end
+                            --]]
                         else
                             %>
                             <p class="lead mb-4 text-danger"><b>Invalid size of the firmware file!</b></p>
