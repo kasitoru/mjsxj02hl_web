@@ -40,8 +40,8 @@ fnc = required.fnc
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
                     current_settings.audio.volume = fnc.number.boundaries(lua.tonumber(cgilua.POST.volume or default_settings.audio.volume), 0, 100)
-                    if cgilua.POST.enable then current_settings.audio.primary_enable = true else current_settings.audio.primary_enable = false end
-                    if cgilua.POST.enable then current_settings.audio.secondary_enable = true else current_settings.audio.secondary_enable = false end
+                    if cgilua.POST.primary_enable then current_settings.audio.primary_enable = true else current_settings.audio.primary_enable = false end
+                    if cgilua.POST.secondary_enable then current_settings.audio.secondary_enable = true else current_settings.audio.secondary_enable = false end
                     %>
                     <p class="lead mb-4"><b>Audio settings saved successfully!</b></p>
                     <%
