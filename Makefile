@@ -39,7 +39,7 @@ lip:
 	cp -f $(TMPDIR)/lip/LIP.lua $(LUAMOD)/
 
 luades:
-	git clone "https://github.com/avdeevsv91/luades" "$(TMPDIR)/luades"
+	git clone "https://github.com/kasitoru/luades" "$(TMPDIR)/luades"
 	make -C "$(TMPDIR)/luades" LUA_VERSION="$(LUAVER)" CC="$(CC)" CCFLAGS="-I./../lua -fPIC $(CCFLAGS)"
 	cp -f $(TMPDIR)/luades/ldes.so $(LUALIB)/
 

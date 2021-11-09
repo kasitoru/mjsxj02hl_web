@@ -19,7 +19,7 @@ required = function()
         -- External
         lfs  = require "lfs", -- LuaFileSystem - File System Library for Lua (https://github.com/keplerproject/luafilesystem)
         md5  = require "md5", -- MD5 - Cryptographic Library for Lua (https://github.com/keplerproject/md5)
-        ldes = require "ldes", -- Standart UNIX crypt for Lua (https://github.com/avdeevsv91/luades)
+        ldes = require "ldes", -- Standart UNIX crypt for Lua (https://github.com/kasitoru/luades)
         lip  = require "LIP", -- Lua INI Parser (https://github.com/Dynodzzo/Lua_INI_Parser)
         fnc  = require "functions", -- Custom functions (functions/init.lua)
     }
