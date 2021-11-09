@@ -56,7 +56,7 @@ function build_navbar_tree(dir, subdir)
         end
     end
     if fnc.string.is_empty(subdir) then -- Top level
-        navbar_add_item("Instructions", "https://io-net.ru/mjsxj02hl_firmware", false, true)
+        navbar_add_item("Instructions", "https://kasito.ru/mjsxj02hl_firmware", false, true)
         navbar_add_item("Telegram", "https://t.me/mjsxj02hl_firmware", false, true)
     end
     cgilua.print([[</ul>]])
