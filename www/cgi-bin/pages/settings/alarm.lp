@@ -8,13 +8,8 @@ fnc = required.fnc
         <div class="text-center">
             <%
             -- Get current and defaults settings
-            local config_file = "/usr/app/share/mjsxj02hl.conf"
             local default_settings = fnc.app.default_settings()
-            local current_settings = default_settings
-            if fnc.file.is_file(config_file) then
-                current_settings = lip.load(config_file)
-                current_settings = fnc.table.merge(default_settings, current_settings)
-            end
+            local current_settings = fnc.app.current_settings()
             -- Settings form and logic
             if fnc.string.is_empty(cgilua.POST.action_save) and fnc.string.is_empty(cgilua.POST.action_defaults) then
                 %>
@@ -84,7 +79,7 @@ fnc = required.fnc
                     cgilua.redirect("/")
                     return
                 end
-                lip.save(config_file, current_settings);
+                lip.save(fnc.app.settings_file(), current_settings);
                 if not fnc.app.restart() then
                     %>
                     <p class="lead mb-4 text-danger">Error restarting the MJSXJ02HL application!<br>Please <a href="/cgi-bin/app.lua/system/reboot.lp">reboot</a> your device manually.</p>

@@ -2,6 +2,7 @@ local functions = {
     app = {},
     file = require "functions.file",
     string = require "functions.string",
+    table = require "functions.table",
     number = require "functions.number",
 }
 package.loaded[...] = functions.app
@@ -98,6 +99,24 @@ functions.app.default_settings = function()
             gray                    = 2,           -- Grayscale (0 = off, 1 = on, 2 = auto)
         },
     }
+end
+
+-- File of mjsxj02hl application settings
+functions.app.settings_file = function()
+    return "/usr/app/share/mjsxj02hl.conf"
+end
+
+-- Current mjsxj02hl application settings
+functions.app.current_settings = function()
+    local settings_file = functions.app.settings_file()
+    local default_settings = functions.app.default_settings()
+    local current_settings = default_settings
+    if functions.file.is_file(settings_file) then
+        local lip  = require "LIP"
+        current_settings = lip.load(settings_file)
+        current_settings = functions.table.merge(default_settings, current_settings)
+    end
+    return current_settings
 end
 
 -- Default wpa_supplicant.conf settings
