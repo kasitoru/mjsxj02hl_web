@@ -21,6 +21,7 @@ end
 functions.app.default_settings = function()
     return {
         general = {
+            name = "MJSXJ02HL",                    -- Device name
             led = true,                            -- Enable onboard LED indicator
         },
         logger = {

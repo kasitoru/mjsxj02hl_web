@@ -2,6 +2,9 @@
 lfs = required.lfs
 fnc = required.fnc
 
+-- Get current settings
+local current_settings = fnc.app.current_settings()
+
 -- Add item to navbar
 function navbar_add_item(name, url, active, top)
     local class = ""
@@ -67,7 +70,7 @@ end
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>MJSXJ02HL: <%= page_info.title %></title>
+        <title><%= current_settings.general.name %>: <%= page_info.title %></title>
         <link rel="icon" href="/favicon.ico">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/style.css">
@@ -78,7 +81,7 @@ end
             %>
             <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="/">MJSXJ02HL</a>
+                    <a class="navbar-brand" href="/"><%= current_settings.general.name %></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>

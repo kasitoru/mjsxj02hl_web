@@ -24,6 +24,10 @@ fnc = required.fnc
                 <p class="lead mb-4"><b>General settings</b></p>
                 <form method="POST" id="settings_form" class="d-grid gap-2 justify-content-sm-center">
                     <div class="form-group text-start">
+                        <label for="name" class="form-label">Device name:</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="<%= default_settings.general.name %>" value="<%= current_settings.general.name %>">
+                    </div>
+                    <div class="form-group text-start">
                         <input type="checkbox" class="form-check-input" id="led" name="led"<% if current_settings.general.led then cgilua.print(" checked") end %>>
                         <label for="led" class="form-check-label">Enable LED indicator</label>
                     </div>
@@ -75,6 +79,7 @@ fnc = required.fnc
                 <%
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
+                    current_settings.general.name = (cgilua.POST.name or default_settings.general.name)
                     if cgilua.POST.led then current_settings.general.led = true else current_settings.general.led = false end
                     current_timezone = (cgilua.POST.timezone or default_timezone)
                     %>
