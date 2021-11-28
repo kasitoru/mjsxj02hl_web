@@ -120,6 +120,11 @@ functions.app.current_settings = function()
     return current_settings
 end
 
+-- Path of wpa_supplicant.conf file
+functions.app.wpa_supplicant_file = function()
+    return "/etc/wpa_supplicant.conf"
+end
+
 -- Default wpa_supplicant.conf settings
 functions.app.default_wpa_supplicant = function()
     return {
