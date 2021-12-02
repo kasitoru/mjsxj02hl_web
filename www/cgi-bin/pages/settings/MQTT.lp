@@ -59,6 +59,10 @@ fnc = required.fnc
                         <label for="periodical_interval" class="form-label">Interval of periodic message (in seconds):</label>
                         <input type="text" class="form-control" id="periodical_interval" name="periodical_interval" placeholder="<%= default_settings.mqtt.periodical_interval %>" value="<%= current_settings.mqtt.periodical_interval %>">
                     </div>
+                    <div class="form-group text-start">
+                        <label for="discovery" class="form-label">Discovery prefix:</label>
+                        <input type="text" class="form-control" id="discovery" name="discovery" placeholder="<%= default_settings.mqtt.discovery %>" value="<%= current_settings.mqtt.discovery %>">
+                    </div>
                     <br>
                     <input type="submit" name="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
                     <input type="submit" name="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
@@ -76,6 +80,7 @@ fnc = required.fnc
                     if cgilua.POST.retain then current_settings.mqtt.retain = true else current_settings.mqtt.retain = false end
                     current_settings.mqtt.reconnection_interval = lua.tonumber(cgilua.POST.reconnection_interval or default_settings.mqtt.reconnection_interval)
                     current_settings.mqtt.periodical_interval = lua.tonumber(cgilua.POST.periodical_interval or default_settings.mqtt.periodical_interval)
+                    current_settings.mqtt.discovery = (cgilua.POST.discovery or default_settings.mqtt.discovery)
                     %>
                     <p class="lead mb-4"><b>MQTT settings saved successfully!</b></p>
                     <%
