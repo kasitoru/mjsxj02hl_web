@@ -8,13 +8,8 @@ fnc = required.fnc
         <div class="text-center">
             <%
             -- Get current and defaults settings
-            local config_file = "/usr/app/share/mjsxj02hl.conf"
             local default_settings = fnc.app.default_settings()
-            local current_settings = default_settings
-            if fnc.file.is_file(config_file) then
-                current_settings = lip.load(config_file)
-                current_settings = fnc.table.merge(default_settings, current_settings)
-            end
+            local current_settings = fnc.app.current_settings()
             -- Settings form and logic
             if fnc.string.is_empty(cgilua.POST.action_save) and fnc.string.is_empty(cgilua.POST.action_defaults) then
                 %>
@@ -33,10 +28,6 @@ fnc = required.fnc
                         <label for="mirror" class="form-check-label">Mirror</label>
                     </div>
                     <p class="lead mb-0">Primary channel</p>
-                    <div class="form-group text-start">
-                        <input type="checkbox" class="form-check-input" id="primary_enable" name="primary_enable"<% if current_settings.video.primary_enable then cgilua.print(" checked") end %>>
-                        <label for="primary_enable" class="form-check-label">Enable video</label>
-                    </div>
                     <div class="form-group text-start">
                         <label for="primary_type" class="form-label">Video compression standard:</label>
                         <select class="form-select" id="primary_type" name="primary_type">
@@ -57,10 +48,6 @@ fnc = required.fnc
                         </select>
                     </div>
                     <p class="lead mb-0">Secondary channel</p>
-                    <div class="form-group text-start">
-                        <input type="checkbox" class="form-check-input" id="secondary_enable" name="secondary_enable"<% if current_settings.video.secondary_enable then cgilua.print(" checked") end %>>
-                        <label for="secondary_enable" class="form-check-label">Enable video</label>
-                    </div>
                     <div class="form-group text-start">
                         <label for="secondary_type" class="form-label">Video compression standard:</label>
                         <select class="form-select" id="secondary_type" name="secondary_type">
@@ -90,11 +77,9 @@ fnc = required.fnc
                     current_settings.video.gop = fnc.number.boundaries(lua.tonumber(cgilua.POST.gop or default_settings.video.gop), 1, 60)
                     if cgilua.POST.flip then current_settings.video.flip = true else current_settings.video.flip = false end
                     if cgilua.POST.mirror then current_settings.video.mirror = true else current_settings.video.mirror = false end
-                    if cgilua.POST.primary_enable then current_settings.video.primary_enable = true else current_settings.video.primary_enable = false end
                     current_settings.video.primary_type = fnc.number.boundaries(lua.tonumber(cgilua.POST.primary_type or default_settings.video.primary_type), 1, 2)
                     current_settings.video.primary_bitrate = fnc.number.boundaries(lua.tonumber(cgilua.POST.primary_bitrate or default_settings.video.primary_bitrate), 2, 61480)
                     current_settings.video.primary_rcmode = fnc.number.boundaries(lua.tonumber(cgilua.POST.primary_rcmode or default_settings.video.primary_rcmode), 0, 2)
-                    if cgilua.POST.secondary_enable then current_settings.video.secondary_enable = true else current_settings.video.secondary_enable = false end
                     current_settings.video.secondary_type = fnc.number.boundaries(lua.tonumber(cgilua.POST.secondary_type or default_settings.video.secondary_type), 1, 2)
                     current_settings.video.secondary_bitrate = fnc.number.boundaries(lua.tonumber(cgilua.POST.secondary_bitrate or default_settings.video.secondary_bitrate), 2, 61480)
                     current_settings.video.secondary_rcmode = fnc.number.boundaries(lua.tonumber(cgilua.POST.secondary_rcmode or default_settings.video.secondary_rcmode), 0, 2)
@@ -110,7 +95,7 @@ fnc = required.fnc
                     cgilua.redirect("/")
                     return
                 end
-                lip.save(config_file, current_settings);
+                lip.save(fnc.app.settings_file(), current_settings);
                 if not fnc.app.restart() then
                     %>
                     <p class="lead mb-4 text-danger">Error restarting the MJSXJ02HL application!<br>Please <a href="/cgi-bin/app.lua/system/reboot.lp">reboot</a> your device manually.</p>

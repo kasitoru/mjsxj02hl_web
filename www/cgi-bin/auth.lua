@@ -3,7 +3,7 @@ local md5 = required().md5
 local ldes = required().ldes
 
 -- Calculate crypto key
-local wpa_content = fnc.file.get_contents("/etc/wpa_supplicant.conf")
+local wpa_content = fnc.file.get_contents(fnc.app.wpa_supplicant_file())
 local crypto_key = md5.sumhexa(wpa_content)
 
 -- Set authentication options

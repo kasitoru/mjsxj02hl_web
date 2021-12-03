@@ -43,6 +43,15 @@ fnc = required.fnc
                         if firmware_length == 12058688 then
                             %>
                             <p class="lead mb-4"><b>Firmware has been successfully saved to the memory card!</b></p>
+                            <p class="mb-4">
+                                <b>Further instructions:</b><br>
+                                <i>
+                                    1. Turn off the device (unplug the power cord);<br>
+                                    2. Hold the reset button and turn on the device;<br>
+                                    3. Do not release the button until the LED indicator turns white;<br>
+                                    4. After flashing, the device will automatically reboot into working mode.<br>
+                                </i>
+                            </p>
                             <%
                             --[[
                             if os.execute("reboot") then

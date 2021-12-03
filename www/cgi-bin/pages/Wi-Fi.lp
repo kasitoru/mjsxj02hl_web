@@ -8,11 +8,11 @@ os = required.os
         <div class="text-center">
             <%
             -- Get current and defaults settings
-            local config_file = "/etc/wpa_supplicant.conf"
+            local wpa_supplicant_file = fnc.app.wpa_supplicant_file()
             local default_settings = fnc.app.default_wpa_supplicant()
             local current_settings = default_settings
-            if fnc.file.is_file(config_file) then
-                current_settings = fnc.file.read_wpa_supplicant(config_file)
+            if fnc.file.is_file(wpa_supplicant_file) then
+                current_settings = fnc.file.read_wpa_supplicant(wpa_supplicant_file)
                 current_settings = fnc.table.merge(default_settings, current_settings)
             end
             -- Settings form and logic
@@ -41,7 +41,7 @@ os = required.os
                     if current_settings.network.scan_ssid > 1 then current_settings.network.scan_ssid = 1 end
                     current_settings.network.ssid = (cgilua.POST.ssid or default_settings.network.ssid)
                     current_settings.network.psk = (cgilua.POST.psk or default_settings.network.psk)
-                    local wpa_result, wpa_error = fnc.file.save_wpa_supplicant(config_file, current_settings)
+                    local wpa_result, wpa_error = fnc.file.save_wpa_supplicant(wpa_supplicant_file, current_settings)
                     if wpa_result then
                         %>
                         <p class="lead mb-4"><b>Wi-Fi configuration saved successfully!</b></p>
@@ -52,7 +52,7 @@ os = required.os
                         <%
                     end
                 elseif not fnc.string.is_empty(cgilua.POST.action_defaults) then
-                    local wpa_result, wpa_error = os.remove(config_file)
+                    local wpa_result, wpa_error = os.remove(wpa_supplicant_file)
                     if wpa_result then
                         %>
                         <p class="lead mb-4"><b>Wi-Fi configuration was successfully reset to factory settings!</b></p>

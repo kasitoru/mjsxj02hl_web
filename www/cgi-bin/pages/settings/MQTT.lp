@@ -8,13 +8,8 @@ fnc = required.fnc
         <div class="text-center">
             <%
             -- Get current and defaults settings
-            local config_file = "/usr/app/share/mjsxj02hl.conf"
             local default_settings = fnc.app.default_settings()
-            local current_settings = default_settings
-            if fnc.file.is_file(config_file) then
-                current_settings = lip.load(config_file)
-                current_settings = fnc.table.merge(default_settings, current_settings)
-            end
+            local current_settings = fnc.app.current_settings()
             -- Settings form and logic
             if fnc.string.is_empty(cgilua.POST.action_save) and fnc.string.is_empty(cgilua.POST.action_defaults) then
                 %>
@@ -56,6 +51,18 @@ fnc = required.fnc
                         <input type="checkbox" class="form-check-input" id="retain" name="retain"<% if current_settings.mqtt.retain then cgilua.print(" checked") end %>>
                         <label for="retain" class="form-check-label">Retained messages</label>
                     </div>
+                    <div class="form-group text-start">
+                        <label for="reconnection_interval" class="form-label">Reconnection interval (in seconds):</label>
+                        <input type="text" class="form-control" id="reconnection_interval" name="reconnection_interval" placeholder="<%= default_settings.mqtt.reconnection_interval %>" value="<%= current_settings.mqtt.reconnection_interval %>">
+                    </div>
+                    <div class="form-group text-start">
+                        <label for="periodical_interval" class="form-label">Interval of periodic message (in seconds):</label>
+                        <input type="text" class="form-control" id="periodical_interval" name="periodical_interval" placeholder="<%= default_settings.mqtt.periodical_interval %>" value="<%= current_settings.mqtt.periodical_interval %>">
+                    </div>
+                    <div class="form-group text-start">
+                        <label for="discovery" class="form-label">Discovery prefix:</label>
+                        <input type="text" class="form-control" id="discovery" name="discovery" placeholder="<%= default_settings.mqtt.discovery %>" value="<%= current_settings.mqtt.discovery %>">
+                    </div>
                     <br>
                     <input type="submit" name="action_save" class="btn btn-primary btn-lg px-4 gap-3" value="Save">
                     <input type="submit" name="action_defaults" class="btn btn-outline-secondary btn-lg px-4" value="Defaults">
@@ -71,6 +78,9 @@ fnc = required.fnc
                     current_settings.mqtt.topic = (cgilua.POST.topic or default_settings.mqtt.topic)
                     current_settings.mqtt.qos = fnc.number.boundaries(lua.tonumber(cgilua.POST.qos or default_settings.mqtt.qos), 0, 2)
                     if cgilua.POST.retain then current_settings.mqtt.retain = true else current_settings.mqtt.retain = false end
+                    current_settings.mqtt.reconnection_interval = lua.tonumber(cgilua.POST.reconnection_interval or default_settings.mqtt.reconnection_interval)
+                    current_settings.mqtt.periodical_interval = lua.tonumber(cgilua.POST.periodical_interval or default_settings.mqtt.periodical_interval)
+                    current_settings.mqtt.discovery = (cgilua.POST.discovery or default_settings.mqtt.discovery)
                     %>
                     <p class="lead mb-4"><b>MQTT settings saved successfully!</b></p>
                     <%
@@ -83,7 +93,7 @@ fnc = required.fnc
                     cgilua.redirect("/")
                     return
                 end
-                lip.save(config_file, current_settings);
+                lip.save(fnc.app.settings_file(), current_settings);
                 if not fnc.app.restart() then
                     %>
                     <p class="lead mb-4 text-danger">Error restarting the MJSXJ02HL application!<br>Please <a href="/cgi-bin/app.lua/system/reboot.lp">reboot</a> your device manually.</p>
