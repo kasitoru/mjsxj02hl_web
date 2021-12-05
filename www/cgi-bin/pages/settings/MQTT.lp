@@ -60,7 +60,7 @@ fnc = required.fnc
                         <input type="text" class="form-control" id="periodical_interval" name="periodical_interval" placeholder="<%= default_settings.mqtt.periodical_interval %>" value="<%= current_settings.mqtt.periodical_interval %>">
                     </div>
                     <div class="form-group text-start">
-                        <label for="discovery" class="form-label">Discovery prefix:</label>
+                        <label for="discovery" class="form-label">Discovery prefix [<a href="https://www.home-assistant.io/docs/mqtt/discovery/#discovery-topic" target="_blank">?</a>]:</label>
                         <input type="text" class="form-control" id="discovery" name="discovery" placeholder="<%= default_settings.mqtt.discovery %>" value="<%= current_settings.mqtt.discovery %>">
                     </div>
                     <br>
