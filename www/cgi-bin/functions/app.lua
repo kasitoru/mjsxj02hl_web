@@ -62,6 +62,7 @@ functions.app.default_settings = function()
             type                    = 1,               -- Default file format (1 = PCM, 2 = G711)
         },
         alarm = {
+            enable                  = true,            -- Enable alarms
             motion_sens             = 150,             -- Motion sensitivity (1-255)
             humanoid_sens           = 150,             -- Humanoid sensitivity (1-255)
             motion_timeout          = 60,              -- Motion timeout (in seconds)
