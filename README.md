@@ -1,6 +1,9 @@
 # mjsxj02hl_web
 WEB interface for mjsxj02hl firmware
 
+**Attention! This firmware is no longer supported by the author. We recommend using [OpenIPC](https://github.com/OpenIPC/device-mjsxj02hl).**
+
+
 ## Dependencies
 
 Hi3518Ev300 [toolchain](https://dl.openipc.org/SDK/HiSilicon/Hi3516Ev200_16Ev300_18Ev300/Hi3516EV200R001C01SPC011/arm-himix100-linux.tgz):
