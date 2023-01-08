@@ -18,7 +18,7 @@ all: mkdirs web
 web: lua cgilua coxpcall lip luades luafilesystem luasocket md5 rings wsapi   
 
 lua:
-	git clone "https://github.com/lua/lua/" "$(TMPDIR)/lua" --branch "v5.4.3"
+	git clone "https://github.com/lua/lua/" "$(TMPDIR)/lua" --branch "v5.4.4"
 	make -C "$(TMPDIR)/lua" CC="$(CC)" AR="$(AR)" RANLIB="$(RANLIB)" CFLAGS="-Wall -O2 -std=c99 -DLUA_USE_LINUX -fno-stack-protector -fno-common $(CCFLAGS)" MYLIBS="-ldl"
 	cp -f $(TMPDIR)/lua/lua $(BINDIR)/
 
