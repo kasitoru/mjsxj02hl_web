@@ -11,8 +11,8 @@ local options = {
     method = "passwd",
     tokenPersistence="cookie",
     tokenName = "session",
-    criptKey=crypto_key,
-    checkURL="/cgi-bin/login.lua",
+    criptKey = crypto_key,
+    checkURL = "/cgi-bin/login.lua",
 }
 
 -- Authentication method
