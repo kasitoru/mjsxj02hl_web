@@ -14,7 +14,12 @@ fnc = required.fnc
             if fnc.string.is_empty(cgilua.POST.action_save) and fnc.string.is_empty(cgilua.POST.action_defaults) then
                 %>
                 <p class="lead mb-4"><b>Alarm settings</b></p>
-                <form method="POST" id="settings_form" class="d-grid gap-2 justify-content-sm-center">
+                <form method="POST" id="settings_form" class="d-grid gap-2 justify-content-sm-center">                    <p class="lead mb-0">On/Off</p>
+                    <div class="form-group text-start">
+                        <input type="checkbox" class="form-check-input" id="enable" name="enable"<% if current_settings.alarm.enable then cgilua.print(" checked") end %>>
+                        <label for="enabled" class="form-label">Enable alarms</label>
+                    </div>
+
                     <p class="lead mb-0">Motion</p>
                     <div class="form-group text-start">
                         <label for="motion_sens" class="form-label">Sensitivity (1-255):</label>
@@ -57,6 +62,9 @@ fnc = required.fnc
                 <%
             else
                 if not fnc.string.is_empty(cgilua.POST.action_save) then
+                    -- Enabled
+                    if cgilua.POST.enable then current_settings.alarm.enable = true else current_settings.alarm.enable = false end
+
                     -- Motion
                     current_settings.alarm.motion_sens = fnc.number.boundaries(lua.tonumber(cgilua.POST.motion_sens or default_settings.alarm.motion_sens), 1, 255)
                     current_settings.alarm.motion_timeout = lua.tonumber(cgilua.POST.motion_timeout or default_settings.alarm.motion_timeout)

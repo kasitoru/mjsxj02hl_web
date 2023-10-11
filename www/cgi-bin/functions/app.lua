@@ -62,6 +62,7 @@ functions.app.default_settings = function()
             type                    = 1,               -- Default file format (1 = PCM, 2 = G711)
         },
         alarm = {
+            enable                  = true,            -- Enable alarms
             motion_sens             = 150,             -- Motion sensitivity (1-255)
             humanoid_sens           = 150,             -- Humanoid sensitivity (1-255)
             motion_timeout          = 60,              -- Motion timeout (in seconds)
@@ -114,7 +115,7 @@ functions.app.current_settings = function()
     local default_settings = functions.app.default_settings()
     local current_settings = default_settings
     if functions.file.is_file(settings_file) then
-        local lip  = require "LIP"
+        local lip = required().lip
         current_settings = lip.load(settings_file)
         current_settings = functions.table.merge(default_settings, current_settings)
     end

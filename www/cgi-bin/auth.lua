@@ -8,18 +8,18 @@ local crypto_key = md5.sumhexa(wpa_content)
 
 -- Set authentication options
 local options = {
-    method = "shadow",
+    method = "passwd",
     tokenPersistence="cookie",
     tokenName = "session",
-    criptKey=crypto_key,
-    checkURL="/cgi-bin/login.lua",
+    criptKey = crypto_key,
+    checkURL = "/cgi-bin/login.lua",
 }
 
 -- Authentication method
 local methods = {
-    shadow = {
+    passwd = {
         check = function(username, password)
-            local file = io.open("/etc/shadow", "r")
+            local file = io.open("/etc/passwd", "r")
             if fnc.file.is_file_descriptor(file) then
                 local user_found = false
                 for line in file:lines() do
@@ -41,7 +41,7 @@ local methods = {
                 file:close()
                 return false, "Wrong user/password combination!"
             else
-                return false, "Can't open file /etc/shadow!"
+                return false, "Can't open file /etc/passwd!"
             end
         end
     }

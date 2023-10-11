@@ -90,7 +90,8 @@ end
                         build_navbar_tree("pages")
                         %>
                         <div class="d-flex">
-                            <a class="btn btn-outline-danger" href="<%= cgilua.authentication.logoutURL() %>">Logout</a>
+                            <a class="btn btn-outline-secondary me-2" href="/cgi-bin/app.lua/profile.lp">User profile</a>
+                            <a class="btn btn-outline-danger" href="<%= cgilua.authentication.logoutURL() %>">Logout (<%= cgilua.authentication.username() %>)</a>
                         </div>
                     </div>
                 </div>
