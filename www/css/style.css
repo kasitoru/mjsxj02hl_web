@@ -3,3 +3,38 @@
     border-color: #ced4da;
 }
 
+textarea {
+  height: 300px;
+  text-wrap: nowrap;
+}
+
+@media (min-width: 576px) {
+  textarea {
+    min-width: 140px;  
+  }
+}
+
+@media (min-width: 768px) {
+  textarea {
+    min-width: 368px;  
+  }
+}
+
+@media (min-width: 992px) {
+  textarea {
+    min-width: 592px;  
+  }
+}
+
+@media (min-width: 1200px) {
+  textarea {
+    min-width: 800px;  
+  }
+}
+
+@media (min-width: 1400px) {
+  textarea {
+    min-width: 1000px;  
+  }
+}
+

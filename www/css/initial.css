@@ -1,10 +1,5 @@
 @charset "UTF-8";
-/*!
- * Bootstrap v5.0.1 (https://getbootstrap.com/)
- * Copyright 2011-2021 The Bootstrap Authors
- * Copyright 2011-2021 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
+
 :root {
   --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -78,21 +73,25 @@ input {
     max-width: 540px;
   }
 }
+
 @media (min-width: 768px) {
   .container {
     max-width: 720px;
   }
 }
+
 @media (min-width: 992px) {
   .container {
     max-width: 960px;
   }
 }
+
 @media (min-width: 1200px) {
   .container {
     max-width: 1140px;
   }
 }
+
 @media (min-width: 1400px) {
   .container {
     max-width: 1320px;
