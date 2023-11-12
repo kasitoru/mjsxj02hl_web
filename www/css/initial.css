@@ -78,17 +78,11 @@ textarea {
   .container {
     max-width: 540px;
   }
-  textarea {
-    min-width: 140px;  
-  }
 }
 
 @media (min-width: 768px) {
   .container {
     max-width: 720px;
-  }
-  textarea {
-    min-width:368px;  
   }
 }
 
@@ -96,26 +90,17 @@ textarea {
   .container {
     max-width: 960px;
   }
-  textarea {
-    min-width: 592px;  
-  }
 }
 
 @media (min-width: 1200px) {
   .container {
     max-width: 1140px;
   }
-  textarea {
-    min-width: 800px;  
-  }
 }
 
 @media (min-width: 1400px) {
   .container {
     max-width: 1320px;
-  }
-  textarea {
-    min-width: 1000px;  
   }
 }
 
