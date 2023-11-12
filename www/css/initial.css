@@ -39,17 +39,11 @@ label {
   display: inline-block;
 }
 
-input,textarea {
+input {
   margin: 0;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
-}
-
-textarea {
-  resize: vertical;
-  text-wrap: nowrap;
-  height: 400px;
 }
 
 [type=submit] {
