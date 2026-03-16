@@ -38,7 +38,7 @@ index 0480f50..f1f2fb2 100755
 +++ b/src/launchers/cgilua.cgi
 @@ -1,7 +1,7 @@
 -#!/usr/bin/env lua
-+#!/usr/app/bin/lua
++#!/backk/bin/lua
  
  -- CGILua (SAPI) launcher, extracts script to launch
 --- either from the command line (use #!cgilua in the script)

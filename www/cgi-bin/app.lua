@@ -1,4 +1,4 @@
-#!/usr/app/bin/cgilua.cgi
+#!/backk/bin/cgilua.cgi
 
 cgilua.doif("required.lua")
 cgilua.doif("auth.lua")

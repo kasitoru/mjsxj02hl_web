@@ -106,7 +106,7 @@ end
 
 -- File of mjsxj02hl application settings
 functions.app.settings_file = function()
-    return "/usr/app/share/mjsxj02hl.conf"
+    return "/configs/mjsxj02hl.conf"
 end
 
 -- Current mjsxj02hl application settings

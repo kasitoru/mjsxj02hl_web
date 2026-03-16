@@ -12,7 +12,7 @@ fnc = required.fnc
                 %>
                 <p class="lead mb-4"><b>Upgrade the device firmware.</b></p>
                 <%
-                local version_content, version_error = fnc.file.get_contents("/usr/app/share/.version")
+                local version_content, version_error = fnc.file.get_contents("/backk/share/.version")
                 if version_error or fnc.string.is_empty(version_content) then
                     version_content = "Unknown"
                 end
